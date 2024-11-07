@@ -6,6 +6,6 @@ Welcome to the MoTrPAC Endurance Exercise Training Workshop! This workshop will 
 
 Participants will learn how to utilize R to interact with multi-tissue, multi-omic data, understand key study variables, and generate informative visualizations, such as volcano plots and principal component analyses. This workshop is suitable for those with basic R knowledge who are interested in learning about bioinformatics tools and approaches for exercise physiology research. 
 
-Check the link to the R notebook [here](R-workshops/rat-endurance-6m.Rmd)
+Check the link to the R notebook [here](rat-endurance-6m.Rmd)
 
 
