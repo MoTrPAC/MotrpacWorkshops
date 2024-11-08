@@ -88,6 +88,7 @@ library(MotrpacRatTraining6moData)
 library(MotrpacRatTraining6mo)
 library(ggplot2) # for plots in this tutorial 
 library(dplyr)
+library(impute)  # For KNN imputation
 ```
 
 # Study design: the PHENO data object
@@ -178,12 +179,12 @@ is a summary of the major components:
     each sample vial. This ID is present across all related results and
     metadata files, serving as a key to link the quantitative results
     with the phenotypic data.
--   **`sex`**: Sex of the animal. Represented as `"1"` for Female and
-    `"2"` for Male. This variable is critical for any analysis that aims
+-   **`sex`**: Sex of the animal. Represented as `"female"` for Female
+    and `"male"`. This variable is critical for any analysis that aims
     to determine sex-based differences.
 -   **`group`**: A simplify version of `study_group_timepoint` that only
-    includes the group and time points: `control`, `1w`, `2w`, `4w`, and
-    `8w`
+    includes the group and time points: `control` (sedentary), and `1w`,
+    `2w`, `4w`, and `8w` (exercise)
 -   **`tissue`**: tissue name (short)
 
 In summary, the **PHENO** object provides a comprehensive overview of
@@ -221,7 +222,8 @@ count_data <- PHENO %>%
 # Create the grouped bar chart
 p <- ggplot(count_data, aes(x = group, y = unique_pid_count, fill = sex)) +
   geom_bar(stat = "identity", position = position_dodge()) +
-  labs(title = "Animal Count",
+  labs(title = "Animal count",
+       subtitle = "All animals processed at the Animal Site",
        x = "Study Group Time Point",
        y = "Count of Unique Animals (pid)",
        fill = "Sex") +
@@ -232,7 +234,7 @@ print(p)
 
 #  Animals used in this study
 
-# Count unique 'pid' by 'group' and 'sex'
+# Filter by pid (i.e., the animal id)
 count_data <- PHENO %>%
   filter(pid %in% rat_omics) %>%
   group_by(group, sex) %>%
@@ -243,7 +245,8 @@ count_data <- PHENO %>%
 # Create the grouped bar chart
 p2 <- ggplot(count_data, aes(x = group, y = unique_pid_count, fill = sex)) +
   geom_bar(stat = "identity", position = position_dodge()) +
-  labs(title = "Animal Count: OMICS Data Only",
+  labs(title = "Animal Count",
+       subtitle = "Only animals used for molecular profile",
        x = "Study Group Time Point",
        y = "Count of Unique Animals (pid)",
        fill = "Sex") +
@@ -266,7 +269,7 @@ viallabel_data <- PHENO %>%
 
 p <- ggplot(viallabel_data, aes(x = tissue, y = total_viallabel_count, fill = group)) +
   geom_bar(stat = "identity") +
-  labs(title = "Total Number of Vial Labels in Each Tissue",
+  labs(title = "Total Number of Samples collected for Each Tissue",
        x = "Tissue",
        y = "Total Count of Vial Labels",
        fill = "Group") +
@@ -308,9 +311,8 @@ training_session_order <- c("training.day1_weight",
 pheno_long$training_session <- factor(pheno_long$training_session, 
                                       levels = training_session_order)
 
-# Plot the jittered plot for each training session with boxplots in the background, faceted by sex and colored by group
+# Plot the jittered plot for each training session, faceted by sex and colored by group
 p1 <- ggplot(pheno_long, aes(x = training_session, y = weight, color = group)) +
-  # geom_boxplot(alpha = 0.3, outlier.shape = NA, na.rm = TRUE) +
   geom_jitter(width = 0.2, size = 2, alpha = 0.6, na.rm = TRUE) +
   facet_wrap(~sex) +
   theme_bw() +
@@ -322,8 +324,7 @@ p1 <- ggplot(pheno_long, aes(x = training_session, y = weight, color = group)) +
 print(p1)
 
 p2 <- ggplot(pheno_long, aes(x = training_session, y = weight, color = group)) +
-  geom_boxplot(alpha = 0.3, outlier.shape = NA, na.rm = TRUE) +
-  # geom_jitter(width = 0.2, size = 2, alpha = 0.6, na.rm = TRUE) +
+  geom_boxplot(alpha = 0.3, outlier.shape = NA, na.rm = TRUE, linewidth = 0.5) +
   facet_wrap(~sex, scales = "free") +
   theme_bw() +
   labs(title = "Weight by Training Session",
@@ -349,6 +350,8 @@ print(p3)
 
 #### VO2max
 
+VO2max measurements were taken at the start for all time points, and at the end for the 4-week, 8-week, and control training sessions.
+
 ```{r}
 # colnames(PHENO)[grep("vo2*d_visit", colnames(PHENO))]
 
@@ -369,12 +372,13 @@ pheno_long <- unique_pheno %>%
                       names_to = "training_session", 
                       values_to = "vo2max")
 
-p1 <- ggplot(pheno_long, aes(x = training_session, y = vo2max, color = group)) +
+p1 <- ggplot(pheno_long, 
+             aes(x = training_session, y = vo2max, color = group)) +
   geom_boxplot(alpha = 0.3, outlier.shape = NA, na.rm = TRUE) +
   # geom_jitter(width = 0.2, size = 2, alpha = 0.6, na.rm = TRUE) +
   facet_wrap(~sex, scales = "free") +
   theme_bw() +
-  labs(title = "VO2max at first and last sesion",
+  labs(title = "VO2max distributions at first and last training session",
        x = "Training Session",
        y = "VO2max") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -386,7 +390,7 @@ p2 <- ggplot(pheno_long, aes(x = training_session, y = vo2max, group = group, co
   stat_summary(fun = mean, geom = "line", size = 1, alpha = 0.7, na.rm = TRUE) +
   facet_wrap(~sex) +
   theme_linedraw() +
-  labs(title = "VO2max",
+  labs(title = "Mean VO2max at first and last training session",
        x = "Training Session",
        y = "Mean VO2max") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -409,37 +413,37 @@ abbreviations are also available in `TISSUE_ABBREV` and `ASSAY_ABBREV`.
 
 ### Tissues
 
--   **ADRNL:** adrenal gland\
--   **BAT:** brown adipose tissue\
--   **BLOOD:** whole blood\
--   **COLON:** colon\
--   **CORTEX:** cerebral cortex\
--   **HEART:** heart\
--   **HIPPOC:** hippocampus\
--   **HYPOTH:** hypothalamus\
--   **KIDNEY:** kidney\
--   **LIVER:** liver\
--   **LUNG:** lung\
--   **OVARY:** ovaries (female gonads)\
+-   **ADRNL:** adrenal gland
+-   **BAT:** brown adipose tissue
+-   **BLOOD:** whole blood
+-   **COLON:** colon
+-   **CORTEX:** cerebral cortex
+-   **HEART:** heart
+-   **HIPPOC:** hippocampus
+-   **HYPOTH:** hypothalamus
+-   **KIDNEY:** kidney
+-   **LIVER:** liver
+-   **LUNG:** lung
+-   **OVARY:** ovaries (female gonads)
 -   **PLASMA:** plasma from blood
--   **SKM-GN:** gastrocnemius (leg skeletal muscle)\
+-   **SKM-GN:** gastrocnemius (leg skeletal muscle)
 -   **SKM-VL:** vastus lateralis (leg skeletal muscle)
--   **SMLINT:** small intestine\
--   **SPLEEN:** spleen\
--   **TESTES:** testes (male gonads)\
--   **VENACV:** vena cava\
+-   **SMLINT:** small intestine
+-   **SPLEEN:** spleen
+-   **TESTES:** testes (male gonads)
+-   **VENACV:** vena cava
 -   **WAT-SC:** subcutaneous white adipose tissue
 
 ### Assays/omes
 
--   **ACETYL:** acetylproteomics; protein site acetylation\
--   **ATAC:** chromatin accessibility, ATAC-seq data\
--   **IMMUNO:** multiplexed immunoassays (cytokines and hormones)\
--   **METAB:** metabolomics and lipidomics\
--   **METHYL:** DNA methylation, RRBS data\
--   **PHOSPHO:** phosphoproteomics; protein site phosphorylation\
--   **PROT:** global proteomics; protein abundance\
--   **TRNSCRPT:** transcriptomics, RNA-Seq data\
+-   **ACETYL:** acetylproteomics; protein site acetylation
+-   **ATAC:** chromatin accessibility, ATAC-seq data
+-   **IMMUNO:** multiplexed immunoassays (cytokines and hormones)
+-   **METAB:** metabolomics and lipidomics
+-   **METHYL:** DNA methylation, RRBS data
+-   **PHOSPHO:** phosphoproteomics; protein site phosphorylation
+-   **PROT:** global proteomics; protein abundance
+-   **TRNSCRPT:** transcriptomics, RNA-Seq data
 -   **UBIQ:** ubiquitylome; protein site ubiquitination
 
 ## Summary of data
@@ -449,27 +453,27 @@ package:
 
 -   Assay, tissue, sex, and training group abbreviations, codes, colors,
     and order used in plots
--   Phenotypic data, `PHENO`\
+-   Phenotypic data, `PHENO`
 -   Mapping between various feature identifiers, i.e.,
-    `FEATURE_TO_GENE`, `RAT_TO_HUMAN_GENE`\
+    `FEATURE_TO_GENE`, `RAT_TO_HUMAN_GENE`
 -   Ome-specific feature annotation, i.e., `METAB_FEATURE_ID_MAP`,
     `METHYL_FEATURE_ANNOT` (GCP only), `ATAC_FEATURE_ANNOT` (GCP only),
     `PROT_FEATURE_ANNOT` (GCP only), `PHOSPHO_FEATURE_ANNOT` (GCP only),
     `UBIQ_FEATURE_ANNOT` (GCP only), `ACETYL_FEATURE_ANNOT` (GCP only),
-    `TRNSCRPT_FEATURE_ANNOT` (GCP only)\
+    `TRNSCRPT_FEATURE_ANNOT` (GCP only)
 -   Ome-specific sample-level metadata, i.e., `TRNSCRPT_META`,
     `ATAC_META`, `METHYL_META`, `IMMUNO_META`, `PHOSPHO_META`,
-    `PROT_META`, `ACETYL_META`, `UBIQ_META`\
+    `PROT_META`, `ACETYL_META`, `UBIQ_META`
 -   Raw counts for RNA-Seq (TRNSCRPT), ATAC-Seq (ATAC), and RRBS
     (METHYL) data, e.g., `TRNSCRPT_LIVER_RAW_COUNTS`. Note that
     epigenetic data (ATAC and METHYL) must be downloaded from Google
     Cloud Storage. See more details
-    [here](https://motrpac.github.io/MotrpacRatTraining6moData/index.html#access-epigenomics-data-through-google-cloud-storage).\
--   Normalized sample-level data, e.g., `TRNSCRPT_SKMGN_NORM_DATA`\
+    [here](https://motrpac.github.io/MotrpacRatTraining6moData/index.html#access-epigenomics-data-through-google-cloud-storage).
+-   Normalized sample-level data, e.g., `TRNSCRPT_SKMGN_NORM_DATA`
 -   Differential analysis results, e.g., `HEART_PROT_DA`
--   Sample outliers excluded from differential analysis, `OUTLIERS`\
+-   Sample outliers excluded from differential analysis, `OUTLIERS`
 -   Table of training-regulated features at 5% FDR,
-    `TRAINING_REGULATED_FEATURES`\
+    `TRAINING_REGULATED_FEATURES`
 -   Bayesian graphical analysis inputs and results
 -   Pathway enrichment of main graphical clusters, `GRAPH_PW_ENRICH`
 
@@ -490,22 +494,6 @@ exclude_objects <- c("IMMUNO_NORM_DATA_FLAT", "IMMUNO_NORM_DATA_NESTED",
 
 norm_objects <- all_objects[grepl("NORM_DATA", all_objects) & !(all_objects %in% exclude_objects)]
 
-# Create an empty list to store column names
-assay_sampleids <- list()
-
-# Iterate over each object and save its column names, excluding specific values
-for (object_name in norm_objects) {
-  assay_sampleids[[object_name]] <- 
-    setdiff(
-      colnames(
-        get(object_name,
-            envir = asNamespace("MotrpacRatTraining6moData"))),
-      c("feature", "feature_ID", "tissue", "assay"))
-}
-
-# print(assay_sampleids)
-
-# And now only METABOLOMICS:
 ```
 
 ## Load the data
@@ -516,16 +504,16 @@ and tissue. Here we fetch various forms of the sample-level RNA-Seq
 
 ```{r load sample data, eval=F}
 # Load RNA-seq raw counts for brown adipose tissue 
-data = load_sample_data("BAT", "TRNSCRPT", normalized = FALSE)
+data <- load_sample_data("BAT", "TRNSCRPT", normalized = FALSE)
 
 # Load the normalized RNA-seq data for brown adipose tissue instead
-data = load_sample_data("BAT", "TRNSCRPT")
+data <- load_sample_data("BAT", "TRNSCRPT")
 
 # Load the normalized RNA-seq data for brown adipose tissue, but exclude sample outliers 
-data = load_sample_data("BAT", "TRNSCRPT", exclude_outliers = TRUE)
+data <- load_sample_data("BAT", "TRNSCRPT", exclude_outliers = TRUE)
 
 # Load the normalized RNA-seq data for brown adipose tissue for training-regulated features only
-data = load_sample_data("BAT", "TRNSCRPT", training_regulated_only = TRUE)
+data <- load_sample_data("BAT", "TRNSCRPT", training_regulated_only = TRUE)
 ```
 
 `load_sample_data()` will tell you if the specified dataset doesn't
@@ -644,7 +632,9 @@ Function to perform a PCA on any of the available NORM datasets
 
 ```{r}
 # Function to perform PCA and plot the first two PCs
-do_pca_plot <- function(norm_data_object, object_name = NULL) {
+library(impute)  # For KNN imputation
+
+do_pca_plot <- function(norm_data_object, object_name = NULL, impute = FALSE, remove_outliers = FALSE) {
   # Check if the object name is provided or extract it
   if (is.null(object_name)) {
     object_name <- deparse(substitute(norm_data_object))
@@ -656,49 +646,115 @@ do_pca_plot <- function(norm_data_object, object_name = NULL) {
   }
   
   # Extract the sample IDs from the list
-  sample_ids <- assay_sampleids[[object_name]]
+  sample_ids <- setdiff(names(norm_data_object), c("feature", "feature_ID", "tissue", "assay"))
   
   # Subset the data using sample_ids
   data_subset <- norm_data_object[, sample_ids]
   
-  # Remove columns and rows with NA or infinite values
-  data_clean <- data_subset[complete.cases(data_subset) & apply(data_subset, 1, function(x) all(is.finite(x))), ]
+  # Remove columns with more than 80% missing values
+  valid_cols <- colMeans(is.na(data_subset)) < 0.8
+  data_subset <- data_subset[, valid_cols]
   
-  # Perform PCA on the transposed clean data
-  pca_result <- stats::prcomp(t(data_clean))
+  # Ensure there are enough columns left for PCA
+  if (ncol(data_subset) < 2) {
+    stop("Not enough columns remaining after filtering for PCA.")
+  }
+  
+  # Impute or clean data based on 'impute' argument
+  if (impute) {
+    # Impute missing values using KNN, suppressing messages
+    sink(file = nullfile())
+    data_imputed <- impute::impute.knn(as.matrix(data_subset))$data
+    sink()
+  } else {
+    # Remove rows with NA or Inf values
+    data_imputed <- data_subset[stats::complete.cases(data_subset) & apply(data_subset, 1, function(x) all(is.finite(x))), ]
+  }
+  
+  # Ensure there are enough rows left for PCA
+  if (nrow(data_imputed) < 2) {
+    stop("Not enough rows remaining after data cleaning for PCA.")
+  }
+  
+  # Update the sample_ids based on the final data used in PCA
+  valid_sample_ids <- colnames(data_imputed)
+  
+  # Check if sample_ids match 'pid' or 'viallabel' in PHENO and use them accordingly
+  if (all(valid_sample_ids %in% PHENO$pid)) {
+    df_sample_ids <- match(valid_sample_ids, PHENO$pid)
+  } else if (all(valid_sample_ids %in% PHENO$viallabel)) {
+    df_sample_ids <- match(valid_sample_ids, PHENO$viallabel)
+  } else {
+    stop("Sample IDs do not match either 'pid' or 'viallabel' in PHENO.")
+  }
+  
+  # Perform PCA on the transposed imputed/cleaned data
+  pca_result <- stats::prcomp(t(data_imputed))
   
   # Calculate the percentage of variance explained by each PC
   variance_explained <- summary(pca_result)$importance[2, ] * 100
   
   # Create a data frame with phenotypic data and the first 3 PCs
   df <- data.frame(
-    group = PHENO[sample_ids, "group"],
-    sex = PHENO[sample_ids, "sex"],
+    group = PHENO[df_sample_ids, "group"],
+    sex = PHENO[df_sample_ids, "sex"],
     pca_result$x[, 1:3] # take the first three principal components
   )
   
+  # Remove extreme outliers based on IQR for PC1 and PC2 if 'remove_outliers' is TRUE
+  if (remove_outliers) {
+    for (pc in c("PC1", "PC2")) {
+      Q1 <- quantile(df[[pc]], 0.25, na.rm = TRUE)
+      Q3 <- quantile(df[[pc]], 0.75, na.rm = TRUE)
+      IQR_value <- Q3 - Q1
+      
+      # Define the boundaries
+      lower_bound <- Q1 - 3 * IQR_value
+      upper_bound <- Q3 + 3 * IQR_value
+      
+      # Filter the data to remove outliers
+      df <- df[df[[pc]] >= lower_bound & df[[pc]] <= upper_bound, ]
+    }
+  }
+  
+  # Ensure that there are still data points left to plot
+  if (nrow(df) < 1) {
+    stop("No data points left to plot after removing outliers.")
+  }
+  
   # Plot the first two PCs with variance explained in axis labels
-  p <- ggplot(df, aes(x = PC1, y = PC2, fill = group, shape = sex)) + 
-    geom_point(size = 3, colour = "black") +
-    scale_fill_manual(values = GROUP_COLORS) +
-    scale_shape_manual(values = c(male = 21, female = 24)) +
-    theme_bw() +
-    guides(fill = guide_legend(override.aes = list(shape = 21))) +
-    labs(title = paste(object_name),
+  p <- ggplot2::ggplot(df, ggplot2::aes(x = PC1, y = PC2, fill = group, shape = sex)) + 
+    ggplot2::geom_point(size = 3, colour = "black") +
+    ggplot2::scale_fill_manual(values = GROUP_COLORS) +
+    ggplot2::scale_shape_manual(values = c(male = 21, female = 24)) +
+    ggplot2::theme_bw() +
+    ggplot2::guides(fill = ggplot2::guide_legend(override.aes = list(shape = 21))) +
+    ggplot2::labs(title = paste(object_name),
          x = paste0("PC1 (", round(variance_explained[1], 2), "% Variance)"),
          y = paste0("PC2 (", round(variance_explained[2], 2), "% Variance)")) +
-    theme(plot.title = element_text(hjust = 0.5))
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
   
   return(p)
 }
 
-# Example usage of the function
-do_pca_plot(ATAC_SKMGN_NORM_DATA_05FDR)
-do_pca_plot(TRNSCRPT_SKMGN_NORM_DATA)
-do_pca_plot(PROT_SKMGN_NORM_DATA)
-do_pca_plot(PHOSPHO_SKMGN_NORM_DATA)
-
 ```
+
+### One tissue at a time
+
+```{r}
+# Example usage of the function
+do_pca_plot(ATAC_LIVER_NORM_DATA_05FDR)
+do_pca_plot(ATAC_LIVER_NORM_DATA_05FDR, remove_outliers = TRUE)
+
+do_pca_plot(TRNSCRPT_LIVER_NORM_DATA)
+do_pca_plot(TRNSCRPT_LIVER_NORM_DATA, remove_outliers = TRUE)
+
+do_pca_plot(PROT_LIVER_NORM_DATA)
+do_pca_plot(PHOSPHO_LIVER_NORM_DATA)
+```
+
+
+### All tissues / Assays (except Metabolomics)
 
 Perform PCA and plot for all objects in the list of norm objects
 generated above
@@ -706,32 +762,54 @@ generated above
 ```{r}
 for (object_name in norm_objects) {
   norm_data_object <- get(object_name)
-  p <- do_pca_plot(norm_data_object, object_name)
+  p <- do_pca_plot(norm_data_object, object_name, impute = FALSE)
+  print(p)
+}
+```
+
+### Metabolomics
+
+The `NORM` data object for metabolomics contains all tissues and assays.
+To perform a PCA, it requires previous filtering and assay selection.
+Let's massage the data to get a PCA for every assay available for
+`LIVER`. Some of the metabolomics assays require imputation due to a 
+larger number of missing values.
+
+```{r}
+METAB_NORM_ONE_TISSUE <- METAB_NORM_DATA_FLAT %>% filter(tissue == "HEART")
+
+all_assays_one_tissue <- unique(METAB_NORM_ONE_TISSUE$dataset)
+
+for(current_assay in all_assays_one_tissue) {
+  METAB_NORM_ONE_ASSAY <- METAB_NORM_ONE_TISSUE %>% filter(dataset == current_assay)
+  METAB_NORM_ONE_ASSAY <- METAB_NORM_ONE_ASSAY %>% select(-dataset)
+  p <- do_pca_plot(norm_data_object = METAB_NORM_ONE_ASSAY, 
+                   object_name = paste0(toupper(current_assay),"_NORM"),
+                   impute = TRUE)
   print(p)
 }
 ```
 
 ## Differential analysis
 
-
 More details about the differential analysis methods are available in
 the [supplementary information of our *Nature*
 publication](https://www.nature.com/articles/s41586-023-06877-w#Sec14).
 
-Simply put:
-- the *training* differential analysis considers all training
-groups for each sex (sedentary controls and 4 training time points) to
-determine if the analyte significantly changes in either sex at any
-point during the training time course. The adjusted p-values from this
-analysis were used to determine the set of analytes that are regulated
-by endurance exercise training at 5% FDR, referred to as the
+Simply put: 
+
+- the *training* differential analysis considers all
+training groups for each sex (sedentary controls and 4 training time
+points) to determine if the analyte significantly changes in either sex
+at any point during the training time course. The adjusted p-values from
+this analysis were used to determine the set of analytes that are
+regulated by endurance exercise training at 5% FDR, referred to as the
 *training-regulated features*. 
 - The *timewise* differential analysis
 performs pairwise contrasts between trained animals at each time point
 (1, 2, 4, or 8 weeks) and the sex-matched sedentary control animals.
 This gives us sex- and time- specific p-values and effect sizes,
 referred to as the *timewise summary statistics*.
-
 
 ### Volcano plots
 
@@ -823,6 +901,8 @@ plot(-log10(merged$p_value_orginal),
      main="Timewise DA results for ACETYL data")
 ```
 
+### Plot DA for a single feature
+
 We can plot the differential analysis results for a single feature using
 `plot_feature_logfc()`. All of the following examples are different ways
 to plot results for the same feature.
@@ -845,8 +925,9 @@ plot_feature_logfc(assay = "PROT",
 
 ## Bayesian graphical clustering
 
-For a detail tutorial on the graphical clustering analysis, please, visit the 
-original vignette part of the MotrpacRatTraining6mo package [here](https://motrpac.github.io/MotrpacRatTraining6mo/articles/MotrpacRatTraining6mo.html#bayesian-graphical-clustering).
+For a detail tutorial on the graphical clustering analysis, please,
+visit the original vignette part of the MotrpacRatTraining6mo package
+[here](https://motrpac.github.io/MotrpacRatTraining6mo/articles/MotrpacRatTraining6mo.html#bayesian-graphical-clustering).
 
 ## Getting help
 
