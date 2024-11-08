@@ -1,6 +1,6 @@
 # MoTrPAC Workshops
 
-### MoTrPAC R Packages Workshop Overview
+### MoTrPAC R Packages Workshop
 
 Welcome to the MoTrPAC Endurance Exercise Training Workshop! This workshop will guide participants through the use of essential R packages developed as part of the Molecular Transducers of Physical Activity Consortium (MoTrPAC). We will explore how to efficiently access, analyze, and visualize data from the first comprehensive multi-omic study of endurance exercise effects in rats. The workshop is designed to provide both an overview of the available datasets and hands-on experience with the analysis workflows.
 
