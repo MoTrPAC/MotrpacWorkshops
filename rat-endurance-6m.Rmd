@@ -89,6 +89,10 @@ library(MotrpacRatTraining6mo)
 library(ggplot2) # for plots in this tutorial 
 library(dplyr)
 library(impute)  # For KNN imputation
+library(tidyverse)
+library(lubridate)
+library(pheatmap)
+library(viridis)
 ```
 
 # Study design: the PHENO data object
@@ -397,6 +401,111 @@ p2 <- ggplot(pheno_long, aes(x = training_session, y = vo2max, group = group, co
 
 print(p2)
 ```
+
+#### Treadmill speed over time
+
+```{r, fig.width=8, fig.height=10}
+
+# Filter the data for training rats
+PHENO_training <- PHENO %>%
+  filter(intervention == "training")
+
+# Pivot the date columns
+PHENO_long_date <- PHENO_training %>%
+  select(pid, group, matches("training\\.day\\d+date$")) %>%
+  pivot_longer(
+    cols = -c(pid, group),
+    names_to = "day",
+    names_pattern = "training\\.day(\\d+)date$",
+    values_to = "date"
+  ) %>%
+  mutate(
+    day = as.integer(day),
+    date = dmy(date)
+  )
+
+# Pivot the treadmillspeed columns
+PHENO_long_speed <- PHENO_training %>%
+  select(pid, group, matches("training\\.day\\d+_treadmillspeed$")) %>%
+  pivot_longer(
+    cols = -c(pid, group),
+    names_to = "day",
+    names_pattern = "training\\.day(\\d+)_treadmillspeed$",
+    values_to = "treadmillspeed"
+  ) %>%
+  mutate(
+    day = as.integer(day),
+    treadmillspeed = as.numeric(treadmillspeed)
+  )
+
+# Merge the two datasets
+PHENO_long <- suppressWarnings(left_join(PHENO_long_date, PHENO_long_speed, by = c("pid", "group", "day")) %>% distinct())
+
+# Remove rows where both 'date' and 'treadmillspeed' are NA
+PHENO_long <- PHENO_long %>%
+  filter(!(is.na(date) & is.na(treadmillspeed)))
+
+# Create a new Id combining group and pid
+PHENO_long <- PHENO_long %>%
+  mutate(group_pid = paste0(group, "_", pid))
+
+# # Identify duplicates
+# duplicates <- PHENO_long %>%
+#   select(group_pid, date, treadmillspeed) %>%
+#   group_by(group_pid, date) %>%
+#   filter(n() > 1)
+# 
+# # View duplicates
+# print(duplicates)
+
+# Reshape the data to wide format
+PHENO_wide <- PHENO_long %>%
+  pivot_wider(
+    names_from = date,
+    values_from = treadmillspeed
+  )
+
+# Aggregate duplicates by taking the mean of treadmillspeed
+PHENO_long <- PHENO_long %>%
+  group_by(group_pid, date) %>%
+  summarise(
+    treadmillspeed = mean(treadmillspeed, na.rm = TRUE),
+    .groups = 'drop'
+  )
+
+# Reshape the data to wide format
+PHENO_wide <- PHENO_long %>%
+  pivot_wider(
+    names_from = date,
+    values_from = treadmillspeed
+  )
+
+# Convert the data frame to a matrix
+PHENO_matrix <- PHENO_wide %>%
+  column_to_rownames(var = "group_pid") %>%
+  as.matrix()
+
+# Replace NA values with zeros
+PHENO_matrix[is.na(PHENO_matrix)] <- 0
+
+# Create the heatmap
+pheatmap(
+  PHENO_matrix,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  scale = "none",
+  fontsize_row = 4,
+  fontsize_col = 4,
+  angle_col = 45,
+  color = viridis::viridis(100),
+  main = "Treadmill Speed Over Time for Training Rats"
+)
+
+
+```
+
 
 # DATA
 
