@@ -111,8 +111,11 @@ of these tissues. Depending on the assay, between 3 and 6 replicates per
 sex per time point were analyzed.
 
 The **PHENO** object represents phenotypic data from the MoTrPAC
-endurance exercise training study in six-month-old rats. It is a
-comprehensive dataset containing **5,955 rows and 510 variables**, with
+endurance exercise training study in six-month-old rats. 
+
+> **Important**: The endurance study was conducted at two Preclinical Animal Study Sites (PASS): the University of Iowa and Joslin Diabetes Center. *Phenotypic data include animals from both sites*; however, omics data were generated only from animals processed at the University of Iowa site to ensure standardization for molecular assays. Samples from animals at the Joslin site were not used for omics analyses but have been preserved and are stored in freezers. It is anticipated that these samples may become available for follow-up endurance exercise studies through future funding opportunities,
+
+The PHENO data object is a comprehensive dataset containing **5,955 rows and 510 variables**, with
 each row corresponding to a unique sample identified by `viallabel`. The
 dataset captures detailed information on the animals, their training
 regimens, specimen collection, and various physiological metrics. Here
@@ -202,7 +205,8 @@ of physical activity at various biological levels.
 
 #### Animal counts
 
-First, let's select the ids of the rats used in this study:
+First, let's select the ids of the rats used in this study. For that, we will first extract
+the samples ids, and we'll map those samples ids to the rats ids.
 
 ```{r}
 # Load the proteomics data, for example:
@@ -213,6 +217,7 @@ data_prot <- MotrpacRatTraining6mo::combine_normalized_data(
 # Get the unique pid (rat id) values from the proteomics data
 rat_omics <- setdiff(names(data_prot), c("feature", "feature_ID", "tissue", "assay"))
 ```
+Now let's check the total number of animals in the MoTrPAC study and the number of animals used in the omics data.
 
 ```{r}
 
@@ -223,20 +228,41 @@ count_data <- PHENO %>%
             .groups = 'drop') %>%
   ungroup()
 
-# Create the grouped bar chart
-p <- ggplot(count_data, aes(x = group, y = unique_pid_count, fill = sex)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  labs(title = "Animal count",
-       subtitle = "All animals processed at the Animal Site",
-       x = "Study Group Time Point",
-       y = "Count of Unique Animals (pid)",
-       fill = "Sex") +
-  theme_linedraw() +
-  coord_flip()
-
-print(p)
-
 #  Animals used in this study
+p1 <- ggplot(count_data,
+       aes(x = group, y = unique_pid_count, fill = sex)) +
+  geom_bar(stat = "identity",
+           position = position_dodge(width = 0.8),
+           width    = 0.7,
+           color    = "black") +
+  geom_text(aes(label = unique_pid_count),
+            position = position_dodge(width = 0.8),
+            hjust    = -0.3,
+            size     = 3) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  labs(title    = "Animal Count",
+       subtitle = "All animals processed at the Animal Site",
+       x        = "Study Group Time Point",
+       y        = "Unique Animals (pid)",
+       fill     = "Sex") +
+  coord_flip() +
+  theme_linedraw() +
+  theme(
+    plot.title       = element_text(face = "bold", size = 14),
+    plot.subtitle    = element_text(size = 11),
+    axis.text        = element_text(size = 10),
+    axis.title       = element_text(size = 11),
+    legend.position  = "top",
+    legend.title     = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor    = element_blank()
+  ) + 
+  scale_fill_manual(
+    values = c(
+      female = "#FFB6C1",
+      male   = "#1F77B4"))
+    
+print(p1)
 
 # Filter by pid (i.e., the animal id)
 count_data <- PHENO %>%
@@ -247,15 +273,38 @@ count_data <- PHENO %>%
   ungroup()
 
 # Create the grouped bar chart
-p2 <- ggplot(count_data, aes(x = group, y = unique_pid_count, fill = sex)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  labs(title = "Animal Count",
+p2 <- ggplot(count_data,
+       aes(x = group, y = unique_pid_count, fill = sex)) +
+  geom_bar(stat = "identity",
+           position = position_dodge(width = 0.8),
+           width    = 0.7,
+           color    = "black") +
+  geom_text(aes(label = unique_pid_count),
+            position = position_dodge(width = 0.8),
+            hjust    = -0.3,
+            size     = 3) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  labs(title    = "Animal Count",
        subtitle = "Only animals used for molecular profile",
-       x = "Study Group Time Point",
-       y = "Count of Unique Animals (pid)",
-       fill = "Sex") +
+       x        = "Study Group Time Point",
+       y        = "Unique Animals (pid)",
+       fill     = "Sex") +
+  coord_flip() +
   theme_linedraw() +
-  coord_flip()
+  theme(
+    plot.title       = element_text(face = "bold", size = 14),
+    plot.subtitle    = element_text(size = 11),
+    axis.text        = element_text(size = 10),
+    axis.title       = element_text(size = 11),
+    legend.position  = "top",
+    legend.title     = element_text(face = "bold"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor    = element_blank()
+  ) + 
+  scale_fill_manual(
+    values = c(
+      female = "#FFB6C1",
+      male   = "#1F77B4"))
 
 print(p2)
 
@@ -263,22 +312,49 @@ print(p2)
 
 #### Sample counts by tissue
 
-```{r}
+```{r, fig.width=5, fig.height=12}
 # Count total number of unique 'viallabel' by 'tissue'
-viallabel_data <- PHENO %>%
-  filter(pid %in% rat_omics) %>% # only include animals used in the omics data
-  group_by(tissue, group) %>%
-  summarise(total_viallabel_count = n_distinct(viallabel), .groups = 'drop') %>%
-  ungroup()
+library(ggplot2)
 
-p <- ggplot(viallabel_data, aes(x = tissue, y = total_viallabel_count, fill = group)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Total Number of Samples collected for Each Tissue",
-       x = "Tissue",
-       y = "Total Count of Vial Labels",
-       fill = "Group") +
+viallabel_data <- PHENO %>%
+  dplyr::filter(
+    !is.na(tissue), # drop NA tissues
+    pid %in% rat_omics # only include animals used in the omics data
+  ) %>%
+  dplyr::group_by(tissue, group) %>%
+  dplyr::summarise(
+    total_viallabel_count = n_distinct(viallabel),
+    .groups = "drop"
+  ) %>%
+  dplyr::ungroup() %>%
+  dplyr::mutate(
+    tissue = forcats::fct_reorder(tissue, total_viallabel_count, .fun = sum)
+  )
+
+p <- ggplot(viallabel_data,
+       aes(x = tissue,
+           y = total_viallabel_count,
+           fill = group)) +
+  geom_col(position = position_dodge(width = 0.8),
+           width    = 0.7,
+           color    = "black") +
+  geom_text(aes(label = total_viallabel_count),
+            position = position_dodge(width = 0.8),
+            hjust    = -0.1,
+            size     = 2) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  labs(title    = "Vial-label Count by Tissue & Group",
+       x        = "Tissue",
+       y        = "Distinct Vial-labels",
+       fill     = "Group") +
+  coord_flip() +
   theme_minimal() +
-  theme(legend.position = "right") + coord_flip()
+  theme(
+    plot.title       = element_text(face = "bold"),
+    axis.title       = element_text(size = 11),
+    panel.grid.major.y = element_blank(),
+    legend.position    = "top"
+  )
 
 print(p)
 
@@ -605,6 +681,219 @@ norm_objects <- all_objects[grepl("NORM_DATA", all_objects) & !(all_objects %in%
 
 ```
 
+## Metabolomics summaries
+
+MoTrPAC run multiple Metabolomics assays, both Targeted and Untargeted. Let's summarize the data
+and visualize the metabolite counts across all tissues and datasets.
+
+
+#### Metabolite count
+
+Individual platforms
+
+```{r}
+# Calculate the unique feature counts per dataset
+feature_counts <- METAB_NORM_DATA_FLAT %>%
+  group_by(dataset) %>%  # Group only by dataset
+  summarise(unique_feature_count = n_distinct(feature_ID), .groups = "drop") %>%
+  arrange(desc(unique_feature_count))
+
+# Create the bar plot
+p <- ggplot(feature_counts, aes(x = reorder(dataset, unique_feature_count), y = unique_feature_count, fill = dataset)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = unique_feature_count), 
+            hjust = -0.1,  
+            size = 3.5) +  
+  labs(title = "Total number of Metabolites by Platform",
+       caption = "Across all tissues",
+       x = "",
+       y = "Metabolite count") +
+  theme_minimal() +
+  coord_flip() +  # Flip coordinates for better readability
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5),
+        legend.position = "none",  # Hide legend for dataset colors
+        plot.title = element_text(hjust = 0.5, face = "bold", size = 14))
+
+# Print the plot
+print(p)
+```
+
+Combining all platforms
+
+```{r}
+# Add metab_type based on dataset
+METAB_NORM_DATA_FLAT <- METAB_NORM_DATA_FLAT %>%
+  dplyr::mutate(
+    metab_type = ifelse(grepl("-t-", dataset), "targeted", "untargeted")
+  )
+
+# Count the number of feature_ID for each dataset, tissue, and metab_type
+feature_counts <- METAB_NORM_DATA_FLAT %>%
+  dplyr::group_by(dataset, tissue, metab_type) %>%
+  dplyr::summarise(feature_count = n_distinct(feature_ID), .groups = "drop")
+
+# Plot the results with facets for metab_type
+ggplot(feature_counts, aes(x = tissue, y = feature_count, fill = dataset)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  theme_minimal() +
+  labs(
+    title = "Number of metabolites by Dataset, Tissue, and Metab Type",
+    x = "Tissue",
+    y = "Feature Count",
+    fill = "Dataset"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  facet_wrap(~ metab_type, ncol = 1)
+```
+
+Details by Targeted and Untargeted
+
+```{r, fig.width=8, fig.height=10}
+feature_counts_complete <- feature_counts %>%
+  tidyr::complete(tissue, dataset, metab_type, fill = list(feature_count = 0))
+
+# Loop over metab_type and create a plot for each
+for (type in unique(feature_counts_complete$metab_type)) {
+  # Filter for the current metab_type and its datasets
+  type_data <- feature_counts_complete %>%
+    dplyr::filter(metab_type == type) %>%
+    dplyr::filter(if (type == "targeted") grepl("-t-", dataset) else !grepl("-t-", dataset))
+  
+  # Create the plot
+  plot <- ggplot(type_data, aes(x = tissue, y = feature_count, fill = dataset)) +
+    geom_bar(stat = "identity", position = position_dodge(width = 0.8), color = "black") +
+    theme_bw() +
+    labs(
+      title = paste("Metabolite Count by Dataset and Tissue (", type, ")", sep = ""),
+      x = "Tissue",
+      y = "Metabolite Count",
+      fill = "Metabolomics Assay"
+    ) +
+    theme(
+      axis.text.x = element_text(angle = 0, size = 10),
+      axis.text.y = element_text(size = 10),
+      axis.title.x = element_text(size = 12, face = "bold"),
+      axis.title.y = element_text(size = 12, face = "bold"),
+      plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+      panel.grid.major.x = element_blank(),
+      panel.grid.major.y = element_line(color = "gray", linetype = "dotted"),
+      panel.border = element_rect(color = "black", fill = NA, size = 1)
+    ) +
+    scale_x_discrete(expand = c(0.05, 0.05)) +
+    scale_fill_brewer(palette = "Set3") +
+    coord_flip()
+  
+  # Print the plot
+  print(plot)
+}
+```
+Total counts by tissue
+
+```{r, fig.width=9, fig.height=8}
+# Ensure all combinations of tissue and dataset exist, but separately for each metab_type
+feature_counts_complete <- feature_counts %>%
+  tidyr::complete(tissue, dataset, metab_type, fill = list(feature_count = 0))
+
+# Loop over metab_type and create a plot for each
+for (type in unique(feature_counts_complete$metab_type)) {
+  # Filter for the current metab_type and its datasets
+  type_data <- feature_counts_complete %>%
+    dplyr::filter(metab_type == type) %>%
+    dplyr::filter(if (type == "targeted") grepl("-t-", dataset) else !grepl("-t-", dataset))
+  
+  # Create the plot
+  plot <- ggplot(type_data, aes(x = tissue, y = feature_count, fill = dataset)) +
+    geom_bar(stat = "identity", position = "stack", color = "black") +
+    theme_bw() +
+    labs(
+      title = paste("Metabolite Count by Dataset and Tissue (", type, ")", sep = ""),
+      x = "Tissue",
+      y = "Metabolite Count",
+      fill = "Metabolomics Assay"
+    ) +
+    theme(
+      axis.text.x = element_text(angle = 0, size = 10),
+      axis.text.y = element_text(size = 10),
+      axis.title.x = element_text(size = 12, face = "bold"),
+      axis.title.y = element_text(size = 12, face = "bold"),
+      plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+      panel.grid.major.x = element_blank(),
+      panel.grid.major.y = element_line(color = "gray", linetype = "dotted"),
+      panel.border = element_rect(color = "black", fill = NA, size = 1)
+    ) +
+    scale_x_discrete(expand = c(0.05, 0.05)) +
+    scale_fill_brewer(palette = "Set3") +
+    coord_flip()
+  
+  # Print the plot
+  print(plot)
+}
+```
+Total counts by targeted and untargeted
+
+```{r}
+# Summarize the feature counts for each tissue and metab_type
+feature_counts_summary <- feature_counts %>%
+  dplyr::group_by(tissue, metab_type) %>%
+  dplyr::summarise(total_features = sum(feature_count), .groups = "drop")
+
+# Create the combined stacked bar plot
+ggplot(feature_counts_summary, aes(x = tissue, y = total_features, fill = metab_type)) +
+  geom_bar(stat = "identity", position = "stack", color = "black") +
+  theme_light() +
+  labs(
+    title = "Metabolite Counts by Tissue (Targeted & Untargeted)",
+    x = "Tissue",
+    y = "Total Feature Count",
+    fill = "Metabolomics Type"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size = 10),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 12, face = "bold"),
+    axis.title.y = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_line(color = "gray", linetype = "dotted"),
+    panel.border = element_rect(color = "black", fill = NA, size = 1),
+    legend.position = "right"
+  ) +
+  scale_fill_manual(values = c("targeted" = "steelblue", "untargeted" = "coral")) + coord_flip()
+```
+
+
+#### Metabolite Overlap between features
+
+```{r, fig.width=9, fig.height=8}
+
+library(UpSetR)
+
+# Prepare the data for the UpSet plot
+# Ensure there is one entry per feature_ID and dataset
+upset_data <- METAB_NORM_DATA_FLAT %>%
+  dplyr::select(feature_ID, dataset) %>%
+  dplyr::distinct() %>%  # Remove duplicates
+  dplyr::mutate(value = 1) %>%  # Add a value column to indicate presence
+  tidyr::pivot_wider(names_from = dataset, values_from = value, values_fill = list(value = 0)) %>%
+  as.data.frame()
+
+# Convert to the format suitable for UpSetR
+upset_input <- upset_data[, -1]  # Remove the feature_ID column
+
+# Generate the UpSet plot
+upset(
+  upset_input,
+  sets = colnames(upset_input),
+  sets.bar.color = "skyblue",
+  main.bar.color = "black",
+  matrix.color = "blue",
+  text.scale = c(1, 1, 1, 1.5, 1, 1.5),
+  order.by = "freq",
+  keep.order = TRUE
+)
+```
+
+
 ## Load the data
 
 Use `load_sample_data()` to load sample-level data for a specific ome
@@ -884,7 +1173,7 @@ Let's massage the data to get a PCA for every assay available for
 `LIVER`. Some of the metabolomics assays require imputation due to a 
 larger number of missing values.
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 METAB_NORM_ONE_TISSUE <- METAB_NORM_DATA_FLAT %>% filter(tissue == "HEART")
 
 all_assays_one_tissue <- unique(METAB_NORM_ONE_TISSUE$dataset)
