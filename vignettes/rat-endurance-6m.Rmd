@@ -10,6 +10,10 @@ output:
       smooth_scroll: false
     theme: sandstone
     highlight: tango
+vignette: >
+  %\VignetteIndexEntry{MoTrPAC R Packages from the Endurance Training in Young Rats Study}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 editor_options: 
   markdown: 
     wrap: 72
