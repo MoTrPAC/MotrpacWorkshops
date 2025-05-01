@@ -1,11 +1,21 @@
 # MoTrPAC Workshops
 
-### MoTrPAC R Packages Workshop
+This repo compiles R notebooks to guide participants through the use of 
+essential R packages developed as part of the Molecular Transducers of 
+Physical Activity Consortium (MoTrPAC). 
+The code is designed to provide both an overview of the available datasets 
+and hands-on experience with the analysis workflows.
 
-Welcome to the MoTrPAC Endurance Exercise Training Workshop! This workshop will guide participants through the use of essential R packages developed as part of the Molecular Transducers of Physical Activity Consortium (MoTrPAC). We will explore how to efficiently access, analyze, and visualize data from the first comprehensive multi-omic study of endurance exercise effects in rats. The workshop is designed to provide both an overview of the available datasets and hands-on experience with the analysis workflows.
+### Workshop: MoTrPAC R Packages from the Endurance Training in Young Rats Study
 
-Participants will learn how to utilize R to interact with multi-tissue, multi-omic data, understand key study variables, and generate informative visualizations, such as volcano plots and principal component analyses. This workshop is suitable for those with basic R knowledge who are interested in learning about bioinformatics tools and approaches for exercise physiology research. 
-
-Check the link to the R notebook [here](rat-endurance-6m.Rmd)
-
-
+The notebook `rat-endurance-6m.Rmd` available in vignettes 
+(check the 
+[html version here](https://motrpac.github.io/MotrpacWorkshops/docs/articles/rat-endurance-6m.html)) 
+focuses on the analysis of endurance exercise training data from the MoTrPAC study, 
+specifically using the 
+`MotrpacRatTraining6moData` and 
+`MotrpacRatTraining6moAnalysis` 
+R packages (and some functions around them). 
+Participants will learn how to install and utilize these packages to analyze 
+multi-omic data from a cohort of young rats subjected to endurance training 
+over a 6-month period.
