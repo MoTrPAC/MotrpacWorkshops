@@ -1,0 +1,8 @@
+site_url: https://motrpac.github.io/MotrpacWorkshops/
+
+template:
+  # switch pkgdown to Bootstrap 5
+  bootstrap: 5
+  # optional: pick a Bootswatch theme
+  params:
+    bootswatch: sandstone
