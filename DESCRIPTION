@@ -1,0 +1,11 @@
+Package: MotrpacWorkshops
+Title: MoTrPAC Workshops
+Version: 1.0.0
+Authors@R: 
+    person("David", "Jimenez-Morales", , "davidjm@stanford.edu", role = c("aut", "cre"))
+Description: Workshop materials for MoTrPAC omics analyses
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+URL: https://motrpac.github.io/MotrpacWorkshops/
