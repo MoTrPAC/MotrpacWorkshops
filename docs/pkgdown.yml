@@ -1,0 +1,6 @@
+pandoc: 3.6.3
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  rat-endurance-6m: rat-endurance-6m.html
+last_built: 2025-05-01T01:09Z
