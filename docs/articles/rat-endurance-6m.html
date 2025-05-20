@@ -162,7 +162,9 @@ untrained rats were used as controls. Whole blood, plasma, and 18 solid
 tissues were analyzed using genomics, proteomics, metabolomics, and
 protein immunoassay technologies, with most assays performed in a subset
 of these tissues. Depending on the assay, between 3 and 6 replicates per
-sex per time point were analyzed.</p>
+sex per time point were analyzed. <a href="https://motrpac-data.org/project-overview#endurance-training" class="external-link">Check
+this link</a> to find out more about the experimental design, and <a href="https://www.nature.com/articles/s41586-023-06877-w/figures/1" class="external-link">Figure
+1 of the Nature paper</a>.</p>
 <p>The <strong>PHENO</strong> object represents phenotypic data from the
 MoTrPAC endurance exercise training study in six-month-old rats.</p>
 <blockquote>
@@ -178,10 +180,10 @@ endurance exercise studies through future funding opportunities,</p>
 </blockquote>
 <p>The PHENO data object is a comprehensive dataset containing
 <strong>5,955 rows and 510 variables</strong>, with each row
-corresponding to a unique sample identified by <code>viallabel</code>.
-The dataset captures detailed information on the animals, their training
-regimens, specimen collection, and various physiological metrics. Here
-is a summary of the major components:</p>
+corresponding to a unique sample identified by <code>viallabel</code>
+(which is the sample id). The dataset captures detailed information on
+the animals, their training regimens, specimen collection, and various
+physiological metrics. Here is a summary of the major components:</p>
 <div class="section level4">
 <h4 id="categories-of-variables-in-the-pheno-dataset">Categories of Variables in the PHENO Dataset<a class="anchor" aria-label="anchor" href="#categories-of-variables-in-the-pheno-dataset"></a>
 </h4>
@@ -1757,7 +1759,7 @@ and National Institute on Aging (NIA).</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.3.3 (2024-02-29)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin20 (64-bit)</span></span>
-<span><span class="co">#&gt; Running under: macOS 15.4.1</span></span>
+<span><span class="co">#&gt; Running under: macOS 15.5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib </span></span>
@@ -1780,41 +1782,41 @@ and National Institute on Aging (NIA).</p>
 <span><span class="co">#&gt;  [9] readr_2.1.5                     tidyr_1.3.1                    </span></span>
 <span><span class="co">#&gt; [11] tibble_3.2.1                    tidyverse_2.0.0                </span></span>
 <span><span class="co">#&gt; [13] impute_1.76.0                   dplyr_1.1.4                    </span></span>
-<span><span class="co">#&gt; [15] ggplot2_3.5.1                   MotrpacRatTraining6mo_1.6.6    </span></span>
+<span><span class="co">#&gt; [15] ggplot2_3.5.2                   MotrpacRatTraining6mo_1.6.6    </span></span>
 <span><span class="co">#&gt; [17] MotrpacRatTraining6moData_2.0.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] Rdpack_2.6.2        mnormt_2.1.1        gridExtra_2.3      </span></span>
-<span><span class="co">#&gt;  [4] sandwich_3.1-1      rlang_1.1.5         magrittr_2.0.3     </span></span>
+<span><span class="co">#&gt;  [1] Rdpack_2.6.4        mnormt_2.1.1        gridExtra_2.3      </span></span>
+<span><span class="co">#&gt;  [4] sandwich_3.1-1      rlang_1.1.6         magrittr_2.0.3     </span></span>
 <span><span class="co">#&gt;  [7] multcomp_1.4-28     qqconf_1.3.2        compiler_4.3.3     </span></span>
-<span><span class="co">#&gt; [10] systemfonts_1.1.0   vctrs_0.6.5         crayon_1.5.3       </span></span>
+<span><span class="co">#&gt; [10] systemfonts_1.2.3   vctrs_0.6.5         crayon_1.5.3       </span></span>
 <span><span class="co">#&gt; [13] pkgconfig_2.0.3     fastmap_1.2.0       labeling_0.4.3     </span></span>
 <span><span class="co">#&gt; [16] ggraph_2.2.1        r2r_0.1.2           rmarkdown_2.29     </span></span>
-<span><span class="co">#&gt; [19] tzdb_0.4.0          ragg_1.3.3          xfun_0.52          </span></span>
-<span><span class="co">#&gt; [22] cachem_1.1.0        jsonlite_1.8.9      tweenr_2.0.3       </span></span>
-<span><span class="co">#&gt; [25] R6_2.6.1            bslib_0.9.0         stringi_1.8.4      </span></span>
+<span><span class="co">#&gt; [19] tzdb_0.5.0          ragg_1.4.0          xfun_0.52          </span></span>
+<span><span class="co">#&gt; [22] cachem_1.1.0        jsonlite_2.0.0      tweenr_2.0.3       </span></span>
+<span><span class="co">#&gt; [25] R6_2.6.1            bslib_0.9.0         stringi_1.8.7      </span></span>
 <span><span class="co">#&gt; [28] RColorBrewer_1.1-3  limma_3.58.1        mutoss_0.1-13      </span></span>
 <span><span class="co">#&gt; [31] jquerylib_0.1.4     numDeriv_2016.8-1.1 Rcpp_1.0.14        </span></span>
-<span><span class="co">#&gt; [34] knitr_1.49          zoo_1.8-12          Matrix_1.6-5       </span></span>
+<span><span class="co">#&gt; [34] knitr_1.50          zoo_1.8-14          Matrix_1.6-5       </span></span>
 <span><span class="co">#&gt; [37] splines_4.3.3       igraph_2.1.4        timechange_0.3.0   </span></span>
 <span><span class="co">#&gt; [40] tidyselect_1.2.1    rstudioapi_0.17.1   yaml_2.3.10        </span></span>
-<span><span class="co">#&gt; [43] codetools_0.2-20    plyr_1.8.9          lattice_0.22-6     </span></span>
+<span><span class="co">#&gt; [43] codetools_0.2-20    plyr_1.8.9          lattice_0.22-7     </span></span>
 <span><span class="co">#&gt; [46] Biobase_2.66.0      withr_3.0.2         evaluate_1.0.3     </span></span>
 <span><span class="co">#&gt; [49] desc_1.4.3          survival_3.8-3      polyclip_1.10-7    </span></span>
-<span><span class="co">#&gt; [52] pillar_1.10.1       stats4_4.3.3        sn_2.1.1           </span></span>
-<span><span class="co">#&gt; [55] generics_0.1.3      mathjaxr_1.6-0      hms_1.1.3          </span></span>
-<span><span class="co">#&gt; [58] munsell_0.5.1       scales_1.3.0        TFisher_0.2.0      </span></span>
-<span><span class="co">#&gt; [61] glue_1.8.0          tools_4.3.3         metap_1.11         </span></span>
-<span><span class="co">#&gt; [64] data.table_1.16.4   locfit_1.5-9.11     fs_1.6.5           </span></span>
-<span><span class="co">#&gt; [67] visNetwork_2.1.2    mvtnorm_1.3-3       graphlayouts_1.2.2 </span></span>
-<span><span class="co">#&gt; [70] tidygraph_1.3.1     grid_4.3.3          plotrix_3.8-4      </span></span>
-<span><span class="co">#&gt; [73] rbibutils_2.3       edgeR_4.0.16        colorspace_2.1-1   </span></span>
-<span><span class="co">#&gt; [76] ggforce_0.4.2       cli_3.6.4           textshaping_1.0.0  </span></span>
-<span><span class="co">#&gt; [79] gtable_0.3.6        sass_0.4.9          digest_0.6.37      </span></span>
-<span><span class="co">#&gt; [82] BiocGenerics_0.48.1 ggrepel_0.9.6       TH.data_1.1-3      </span></span>
-<span><span class="co">#&gt; [85] htmlwidgets_1.6.4   farver_2.1.2        memoise_2.0.1      </span></span>
-<span><span class="co">#&gt; [88] htmltools_0.5.8.1   pkgdown_2.1.1       multtest_2.58.0    </span></span>
-<span><span class="co">#&gt; [91] lifecycle_1.0.4     statmod_1.5.0       MASS_7.3-60.0.1</span></span></code></pre></div>
+<span><span class="co">#&gt; [52] pillar_1.10.2       stats4_4.3.3        sn_2.1.1           </span></span>
+<span><span class="co">#&gt; [55] generics_0.1.3      mathjaxr_1.8-0      hms_1.1.3          </span></span>
+<span><span class="co">#&gt; [58] scales_1.4.0        TFisher_0.2.0       glue_1.8.0         </span></span>
+<span><span class="co">#&gt; [61] tools_4.3.3         metap_1.12          data.table_1.17.0  </span></span>
+<span><span class="co">#&gt; [64] locfit_1.5-9.12     fs_1.6.6            visNetwork_2.1.2   </span></span>
+<span><span class="co">#&gt; [67] mvtnorm_1.3-3       graphlayouts_1.2.2  tidygraph_1.3.1    </span></span>
+<span><span class="co">#&gt; [70] grid_4.3.3          plotrix_3.8-4       rbibutils_2.3      </span></span>
+<span><span class="co">#&gt; [73] edgeR_4.0.16        ggforce_0.4.2       cli_3.6.5          </span></span>
+<span><span class="co">#&gt; [76] textshaping_1.0.1   gtable_0.3.6        sass_0.4.10        </span></span>
+<span><span class="co">#&gt; [79] digest_0.6.37       BiocGenerics_0.48.1 ggrepel_0.9.6      </span></span>
+<span><span class="co">#&gt; [82] TH.data_1.1-3       htmlwidgets_1.6.4   farver_2.1.2       </span></span>
+<span><span class="co">#&gt; [85] memoise_2.0.1       htmltools_0.5.8.1   pkgdown_2.1.2      </span></span>
+<span><span class="co">#&gt; [88] multtest_2.58.0     lifecycle_1.0.4     statmod_1.5.0      </span></span>
+<span><span class="co">#&gt; [91] MASS_7.3-60.0.1</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -1828,7 +1830,7 @@ and National Institute on Aging (NIA).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer>

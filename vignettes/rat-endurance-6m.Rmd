@@ -112,7 +112,9 @@ untrained rats were used as controls. Whole blood, plasma, and 18 solid
 tissues were analyzed using genomics, proteomics, metabolomics, and
 protein immunoassay technologies, with most assays performed in a subset
 of these tissues. Depending on the assay, between 3 and 6 replicates per
-sex per time point were analyzed.
+sex per time point were analyzed. [Check this link](https://motrpac-data.org/project-overview#endurance-training) to find out more about the 
+experimental design, and [Figure 1 of the Nature paper](https://www.nature.com/articles/s41586-023-06877-w/figures/1). 
+
 
 The **PHENO** object represents phenotypic data from the MoTrPAC
 endurance exercise training study in six-month-old rats. 
@@ -120,7 +122,7 @@ endurance exercise training study in six-month-old rats.
 > **Important**: The endurance study was conducted at two Preclinical Animal Study Sites (PASS): the University of Iowa and Joslin Diabetes Center. *Phenotypic data include animals from both sites*; however, omics data were generated only from animals processed at the University of Iowa site to ensure standardization for molecular assays. Samples from animals at the Joslin site were not used for omics analyses but have been preserved and are stored in freezers. It is anticipated that these samples may become available for follow-up endurance exercise studies through future funding opportunities,
 
 The PHENO data object is a comprehensive dataset containing **5,955 rows and 510 variables**, with
-each row corresponding to a unique sample identified by `viallabel`. The
+each row corresponding to a unique sample identified by `viallabel` (which is the sample id). The
 dataset captures detailed information on the animals, their training
 regimens, specimen collection, and various physiological metrics. Here
 is a summary of the major components:
