@@ -422,7 +422,7 @@ print(p2)
 
 p3 <- ggplot(pheno_long, aes(x = training_session, y = weight, group = group, color = group, fill = group)) +
   stat_summary(fun = median, geom = "point", size = 4, shape = 21, alpha = 0.7, na.rm = TRUE) +
-  stat_summary(fun = median, geom = "line", size = 1, alpha = 0.7, na.rm = TRUE) +
+  stat_summary(fun = median, geom = "line", linewidth = 1, alpha = 0.7, na.rm = TRUE) +
   facet_wrap(~sex, scales = "free") +
   theme_linedraw() +
   labs(title = "Mean Weight by Training Session",
@@ -783,7 +783,7 @@ for (type in unique(feature_counts_complete$metab_type)) {
       plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
       panel.grid.major.x = element_blank(),
       panel.grid.major.y = element_line(color = "gray", linetype = "dotted"),
-      panel.border = element_rect(color = "black", fill = NA, size = 1)
+      panel.border = element_rect(color = "black", fill = NA, linewidth = 1)
     ) +
     scale_x_discrete(expand = c(0.05, 0.05)) +
     scale_fill_brewer(palette = "Set3") +
@@ -835,6 +835,7 @@ for (type in unique(feature_counts_complete$metab_type)) {
   print(plot)
 }
 ```
+
 Total counts by targeted and untargeted
 
 ```{r}
@@ -920,8 +921,7 @@ data <- load_sample_data("BAT", "TRNSCRPT", exclude_outliers = TRUE)
 data <- load_sample_data("BAT", "TRNSCRPT", training_regulated_only = TRUE)
 ```
 
-`load_sample_data()` will tell you if the specified dataset doesn't
-exist.
+`load_sample_data()` will tell you if the specified dataset doesn't exist.
 
 ```{r load sample data 2}
 data = load_sample_data("VENACV", "PROT")
