@@ -1,15 +1,13 @@
 ---
 title: "Workshop: MoTrPAC R Packages from the Endurance Training in Young Rats Study"
-output: 
-  rmarkdown::html_document:
-    toc: true
-    code_folding: show 
+author:
+  - name: "David Jimenez-Morales"
+    affiliation: "MoTrPAC Bioinformatics Center (Stanford University)"
+    email: "motrpac-helpdesk@lists.stanford.edu"
+output:
+  rmdformats::readthedown:
     toc_depth: 4
-    toc_float:
-      collapsed: false
-      smooth_scroll: false
-    theme: sandstone
-    highlight: tango
+    code_folding: hide
 vignette: >
   %\VignetteIndexEntry{MoTrPAC R Packages from the Endurance Training in Young Rats Study}
   %\VignetteEngine{knitr::rmarkdown}
@@ -1002,7 +1000,7 @@ data <- combine_normalized_data()
 Similarly, `combine_da_results()` concatenates differential analysis
 results for multiple datasets.
 
-```{r combine da results, eval=F}
+```{r combine da results, eval=TRUE}
 # Return all non-epigenetic differential analysis results, 
 # including meta-regression results for metabolomics
 res <- combine_da_results()
@@ -1012,6 +1010,7 @@ res <- combine_da_results()
 #                          assays=c("ATAC","METHYL"),
 #                          include_epigen=TRUE)
 ```
+
 
 Finally, `list_available_data()` returns a list of all of the available
 data objects in the specified package.
@@ -1179,14 +1178,14 @@ Let's massage the data to get a PCA for every assay available for
 `LIVER`. Some of the metabolomics assays require imputation due to a 
 larger number of missing values.
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=TRUE, include=TRUE}
 METAB_NORM_ONE_TISSUE <- METAB_NORM_DATA_FLAT %>% filter(tissue == "HEART")
 
 all_assays_one_tissue <- unique(METAB_NORM_ONE_TISSUE$dataset)
 
 for(current_assay in all_assays_one_tissue) {
   METAB_NORM_ONE_ASSAY <- METAB_NORM_ONE_TISSUE %>% filter(dataset == current_assay)
-  METAB_NORM_ONE_ASSAY <- METAB_NORM_ONE_ASSAY %>% select(-dataset)
+  METAB_NORM_ONE_ASSAY <- METAB_NORM_ONE_ASSAY %>% select(-dataset, -metab_type)
   p <- do_pca_plot(norm_data_object = METAB_NORM_ONE_ASSAY, 
                    object_name = paste0(toupper(current_assay),"_NORM"),
                    impute = TRUE)
@@ -1214,6 +1213,242 @@ performs pairwise contrasts between trained animals at each time point
 (1, 2, 4, or 8 weeks) and the sex-matched sedentary control animals.
 This gives us sex- and time- specific p-values and effect sizes,
 referred to as the *timewise summary statistics*.
+
+### Number of Differential Analytes: Line plot
+
+```{r}
+# Helper function to summarize up/down regulated features for metabolomics data
+summarize_up_down_analytes <- function(df,
+                                    feature_col = "feature",
+                                    logfc_col   = "logFC",
+                                    pval_col    = "adj_p_value",
+                                    p_threshold = 0.05) {
+  df %>%
+    dplyr::filter(
+      !is.na(.data[[logfc_col]]),
+      !is.na(.data[[pval_col]])
+    ) %>%
+    dplyr::mutate(
+      direction = dplyr::case_when(
+        .data[[pval_col]] < p_threshold & .data[[logfc_col]] >  0 ~ "Up",
+        .data[[pval_col]] < p_threshold & .data[[logfc_col]] <  0 ~ "Down",
+        TRUE                                                     ~ NA_character_
+      )
+    ) %>%
+    dplyr::filter(!is.na(direction)) %>%
+    dplyr::group_by(assay, tissue, comparison_group, sex, direction) %>%
+    dplyr::summarise(count = dplyr::n(), .groups = "drop_last") %>%
+    tidyr::pivot_wider(
+      names_from  = direction,
+      values_from = count,
+      values_fill = list(count = 0)
+    ) %>%
+    dplyr::rename(
+      up_count   = Up,
+      down_count = Down
+    ) %>%
+    dplyr::ungroup()
+}
+
+# Main function to plot differential feature trajectories
+plot_da_trajectories <- function(tissue_select,
+                                 assay_select,
+                                 res_data,
+                                 p_threshold = 0.05) {
+  # First, summarize the data
+  de_counts <- summarize_up_down_analytes(
+    df = res_data,
+    feature_col = "feature",
+    logfc_col = "logFC",
+    pval_col = "adj_p_value",
+    p_threshold = p_threshold
+  )
+  
+  full_time_levels <- c("1w", "2w", "4w", "8w")
+  
+  de_counts <- de_counts %>%
+    dplyr::mutate(timepoint = comparison_group)
+  
+  # Filter & convert down_count to negative
+  df_raw <- de_counts %>%
+    dplyr::filter(tissue == tissue_select,
+                  assay  == assay_select,!is.na(timepoint)) %>%
+    dplyr::mutate(down_count = -down_count)
+  
+  if (nrow(df_raw) == 0) {
+    stop(
+      "No data found for tissue: '",
+      tissue_select,
+      "' and assay: '",
+      assay_select,
+      "'. Check that these values exist in your data."
+    )
+  }
+  
+  # Pivot longer and set factors
+  df_long <- df_raw %>%
+    tidyr::pivot_longer(
+      cols      = c(up_count, down_count),
+      names_to  = "direction",
+      values_to = "count"
+    ) %>%
+    dplyr::mutate(
+      direction = dplyr::if_else(direction == "up_count", "Up", "Down"),
+      sex       = factor(tolower(sex), levels = c("female", "male")),
+      timepoint = as.character(timepoint)
+    )
+  
+  # Identify time points present in data
+  used_time_levels <- intersect(full_time_levels, unique(df_long$timepoint))
+  
+  # If no intersection, use the actual timepoints from data
+  if (length(used_time_levels) == 0) {
+    used_time_levels <- sort(unique(df_long$timepoint))
+    full_time_levels <- used_time_levels
+  }
+  
+  # Complete missing with zeros and aggregate
+  df <- df_long %>%
+    dplyr::mutate(timepoint = factor(timepoint, levels = full_time_levels)) %>%
+    dplyr::ungroup() %>%
+    tidyr::complete(timepoint, sex, direction, fill = list(count = 0)) %>%
+    dplyr::filter(timepoint %in% used_time_levels) %>%
+    dplyr::group_by(timepoint, sex, direction) %>%
+    dplyr::summarise(count = sum(count, na.rm = TRUE), .groups = "drop")
+  
+  if (nrow(df) == 0) {
+    stop("No data remaining after processing for ",
+         tissue_select,
+         " / ",
+         assay_select)
+  }
+  
+  # Compute symmetric y-axis limit
+  y_limit <- ceiling(max(abs(df$count), na.rm = TRUE) / 100) * 100
+  if (y_limit == 0)
+    y_limit <- 10  # minimum scale
+  
+  p <- ggplot(df,
+              aes(
+                x        = timepoint,
+                y        = count,
+                group    = interaction(sex, direction),
+                color    = sex,
+                linetype = direction
+              )) +
+    geom_hline(yintercept = 0,
+               color = "grey50",
+               linewidth = 1) +
+    geom_vline(xintercept = 1,
+               color = "grey50",
+               linewidth = 1) +
+    geom_line(linewidth = 1.2) +
+    geom_point(
+      size = 4,
+      shape = 21,
+      fill = "white",
+      stroke = 0.8
+    ) +
+    scale_color_manual(values = c("female" = "hotpink3", "male"   = "blue3")) +
+    scale_linetype_manual(values = c(Up = "solid", Down = "dotted")) +
+    scale_x_discrete(drop = FALSE) +
+    scale_y_continuous(limits = c(-y_limit, y_limit)) +
+    labs(
+      title    = paste(assay_select, tools::toTitleCase(tissue_select), sep = " - "),
+      x        = "Time Point",
+      y        = "Differential Analyte Count",
+      color    = "Sex",
+      linetype = "Regulation"
+    ) +
+    theme_minimal(base_size = 12) +
+    theme(
+      plot.title         = element_text(
+        size = 14,
+        face = "bold",
+        hjust = 0.5
+      ),
+      axis.text.x        = element_text(
+        angle = -45,
+        hjust = 0,
+        color = "black"
+      ),
+      legend.position    = "bottom"
+    )
+  
+  return(p)
+}
+```
+
+
+Print the trajectory plot only for RNA-seq, HEART
+
+```{r}
+p1 <- plot_da_trajectories(
+  tissue_select = "HEART",
+  assay_select = "TRNSCRPT",
+  res_data = res
+)
+print(p1)
+```
+
+#### RNA-seq, all tissues
+
+```{r}
+assay <- "TRNSCRPT"
+
+for (tissue in unique(res$tissue)) {
+  # Check if this tissue-assay combination exists
+  if (nrow(res %>% filter(tissue == !!tissue, assay == !!assay)) == 0) {
+    cat("Skipping", tissue, "-", assay, ": no data found\n")
+    next
+  }
+  
+  cat("Processing:", tissue, "-", assay, "\n")
+  p <- plot_da_trajectories(
+    tissue_select = tissue,
+    assay_select = assay,
+    res_data = res
+  )
+  print(p)
+}
+
+
+```
+
+
+#### Proteomic assays, all tissues
+
+```{r}
+assay_list <- c("PROT", "PHOSPHO", "ACETYL", "UBIQ")
+
+for (assay in assay_list) {
+  for (tissue in unique(res$tissue)) {
+    # Debug: Check the combination explicitly
+    subset_data <- res[res$tissue == tissue & res$assay == assay, ]
+    
+    cat("Checking:", tissue, "-", assay, "- Found", nrow(subset_data), "rows\n")
+    
+    if (nrow(subset_data) == 0) {
+      cat("Skipping", tissue, "-", assay, ": no data found\n")
+      next
+    }
+    
+    cat("Processing:", tissue, "-", assay, "\n")
+    
+    tryCatch({
+      p <- plot_da_trajectories(
+        tissue_select = tissue,
+        assay_select = assay,
+        res_data = res
+      )
+      print(p)
+    }, error = function(e) {
+      cat("Error with", tissue, "-", assay, ":", e$message, "\n")
+    })
+  }
+}
+```
+
 
 ### Volcano plots
 
