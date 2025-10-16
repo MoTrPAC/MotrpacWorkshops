@@ -1,6 +1,10 @@
-pandoc: 3.6.3
-pkgdown: 2.1.2
+pandoc: '3.8'
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   rat-endurance-6m: rat-endurance-6m.html
-last_built: 2025-05-20T22:47Z
+  rat-training-6m-custom-gene-list: rat-training-6m-custom-gene-list.html
+last_built: 2025-10-16T15:49Z
+urls:
+  reference: https://motrpac.github.io/MotrpacWorkshops/reference
+  article: https://motrpac.github.io/MotrpacWorkshops/articles

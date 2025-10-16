@@ -1,10 +1,11 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
-<url><loc>/404.html</loc></url>
-<url><loc>/LICENSE-text.html</loc></url>
-<url><loc>/articles/index.html</loc></url>
-<url><loc>/articles/rat-endurance-6m.html</loc></url>
-<url><loc>/authors.html</loc></url>
-<url><loc>/index.html</loc></url>
-<url><loc>/reference/index.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/404.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/LICENSE-text.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/articles/index.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/articles/rat-endurance-6m.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/articles/rat-training-6m-custom-gene-list.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/authors.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/index.html</loc></url>
+<url><loc>https://motrpac.github.io/MotrpacWorkshops/reference/index.html</loc></url>
 </urlset>
 

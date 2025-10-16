@@ -1,6 +1,6 @@
 Package: MotrpacWorkshops
 Title: MoTrPAC Workshops
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: 
     person("David", "Jimenez-Morales", , "davidjm@stanford.edu", role = c("aut", "cre"))
 Description: Workshop materials for MoTrPAC omics analyses

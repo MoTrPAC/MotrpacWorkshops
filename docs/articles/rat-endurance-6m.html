@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">MotrpacWorkshops</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/rat-endurance-6m.html">Workshop: MoTrPAC R Packages from the Endurance Training in Young Rats Study</a></li>
+    <li><a class="dropdown-item" href="../articles/rat-training-6m-custom-gene-list.html">Exploring Exercise Response Across Multi-Omics from a Custom Gene List</a></li>
   </ul>
 </li>
       </ul>
@@ -55,7 +56,13 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Workshop: MoTrPAC R Packages from the Endurance Training in Young Rats Study</h1>
-            
+                        <h4 data-toc-skip class="author">David
+Jimenez-Morales</h4>
+            <address class="author_afil">
+      MoTrPAC Bioinformatics Center (Stanford
+University)<br><a class="author_email" href="mailto:#"></a><a href="mailto:motrpac-helpdesk@lists.stanford.edu" class="email">motrpac-helpdesk@lists.stanford.edu</a>
+      </address>
+                  
       
 
       <div class="d-none name"><code>rat-endurance-6m.Rmd</code></div>
@@ -137,8 +144,8 @@ used in this tutorial:</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Attaching core tidyverse packages</span> ──────────────────────── tidyverse 2.0.0 ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">forcats  </span> 1.0.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">stringr  </span> 1.5.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.2.1</span></span>
-<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.0.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.1</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">lubridate</span> 1.9.4     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tibble   </span> 3.3.0</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">purrr    </span> 1.1.0     <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">tidyr    </span> 1.3.1</span></span>
 <span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> <span style="color: #0000BB;">readr    </span> 2.1.5</span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
 <span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> <span style="color: #0000BB;">dplyr</span>::<span style="color: #00BB00;">filter()</span> masks <span style="color: #0000BB;">stats</span>::filter()</span></span>
@@ -520,18 +527,13 @@ the number of animals used in the omics data.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pheno_long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">training_session</span>, y <span class="op">=</span> <span class="va">weight</span>, group <span class="op">=</span> <span class="va">group</span>, color <span class="op">=</span> <span class="va">group</span>, fill <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">median</span>, geom <span class="op">=</span> <span class="st">"point"</span>, size <span class="op">=</span> <span class="fl">4</span>, shape <span class="op">=</span> <span class="fl">21</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">median</span>, geom <span class="op">=</span> <span class="st">"line"</span>, size <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_summary.html" class="external-link">stat_summary</a></span><span class="op">(</span>fun <span class="op">=</span> <span class="va">median</span>, geom <span class="op">=</span> <span class="st">"line"</span>, linewidth <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">sex</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_linedraw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Mean Weight by Training Session"</span>,</span>
 <span>       x <span class="op">=</span> <span class="st">"Training Session"</span>,</span>
 <span>       y <span class="op">=</span> <span class="st">"Mean Weight"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-5-3.png" width="700" style="display: block; margin: auto;"></p>
@@ -585,6 +587,11 @@ at the end for the 4-week, 8-week, and control training sessions.</p>
 <span>       x <span class="op">=</span> <span class="st">"Training Session"</span>,</span>
 <span>       y <span class="op">=</span> <span class="st">"Mean VO2max"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-6-2.png" width="700" style="display: block; margin: auto;"></p>
@@ -940,7 +947,7 @@ across all tissues and datasets.</p>
 <span>      plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">14</span>, face <span class="op">=</span> <span class="st">"bold"</span>, hjust <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>      panel.grid.major.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>      panel.grid.major.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"gray"</span>, linetype <span class="op">=</span> <span class="st">"dotted"</span><span class="op">)</span>,</span>
-<span>      panel.border <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="cn">NA</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span>      panel.border <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_rect</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="cn">NA</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_brewer.html" class="external-link">scale_fill_brewer</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Set3"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -948,12 +955,7 @@ across all tissues and datasets.</p>
 <span>  </span>
 <span>  <span class="co"># Print the plot</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt; Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
+<span><span class="op">}</span></span></code></pre></div>
 <p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-11-2.png" width="768" style="display: block; margin: auto;">
 Total counts by tissue</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -994,9 +996,14 @@ Total counts by tissue</p>
 <span>  </span>
 <span>  <span class="co"># Print the plot</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div>
-<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-12-2.png" width="864" style="display: block; margin: auto;">
-Total counts by targeted and untargeted</p>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Warning: The `size` argument of `element_rect()` is deprecated as of ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-12-1.png" width="864" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-12-2.png" width="864" style="display: block; margin: auto;"></p>
+<p>Total counts by targeted and untargeted</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarize the feature counts for each tissue and metab_type</span></span>
 <span><span class="va">feature_counts_summary</span> <span class="op">&lt;-</span> <span class="va">feature_counts</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1160,6 +1167,80 @@ differential analysis results for multiple datasets.</p>
 <code class="sourceCode R"><span><span class="co"># Return all non-epigenetic differential analysis results, </span></span>
 <span><span class="co"># including meta-regression results for metabolomics</span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://motrpac.github.io/MotrpacRatTraining6mo/reference/combine_da_results.html" class="external-link">combine_da_results</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in combine_da_results(): 'include_epigen' is FALSE. Excluding ATAC and METHYL results.</span></span>
+<span><span class="co">#&gt; ACETYL_HEART_DA</span></span>
+<span><span class="co">#&gt; ACETYL_LIVER_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_ADRNL_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_BAT_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_COLON_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_CORTEX_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_HEART_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_HIPPOC_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_KIDNEY_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_LIVER_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_LUNG_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_OVARY_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_PLASMA_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_SKMGN_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_SKMVL_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_SMLINT_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_SPLEEN_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_TESTES_DA</span></span>
+<span><span class="co">#&gt; IMMUNO_WATSC_DA</span></span>
+<span><span class="co">#&gt; METAB_ADRNL_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_BAT_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_COLON_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_CORTEX_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_HEART_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_HIPPOC_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_HYPOTH_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_KIDNEY_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_LIVER_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_LUNG_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_OVARY_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_PLASMA_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_SKMGN_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_SKMVL_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_SMLINT_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_SPLEEN_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_TESTES_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_VENACV_DA_METAREG</span></span>
+<span><span class="co">#&gt; METAB_WATSC_DA_METAREG</span></span>
+<span><span class="co">#&gt; PHOSPHO_CORTEX_DA</span></span>
+<span><span class="co">#&gt; PHOSPHO_HEART_DA</span></span>
+<span><span class="co">#&gt; PHOSPHO_KIDNEY_DA</span></span>
+<span><span class="co">#&gt; PHOSPHO_LIVER_DA</span></span>
+<span><span class="co">#&gt; PHOSPHO_LUNG_DA</span></span>
+<span><span class="co">#&gt; PHOSPHO_SKMGN_DA</span></span>
+<span><span class="co">#&gt; PHOSPHO_WATSC_DA</span></span>
+<span><span class="co">#&gt; PROT_CORTEX_DA</span></span>
+<span><span class="co">#&gt; PROT_HEART_DA</span></span>
+<span><span class="co">#&gt; PROT_KIDNEY_DA</span></span>
+<span><span class="co">#&gt; PROT_LIVER_DA</span></span>
+<span><span class="co">#&gt; PROT_LUNG_DA</span></span>
+<span><span class="co">#&gt; PROT_SKMGN_DA</span></span>
+<span><span class="co">#&gt; PROT_WATSC_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_ADRNL_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_BAT_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_BLOOD_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_COLON_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_CORTEX_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_HEART_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_HIPPOC_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_HYPOTH_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_KIDNEY_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_LIVER_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_LUNG_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_OVARY_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_SKMGN_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_SKMVL_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_SMLINT_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_SPLEEN_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_TESTES_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_VENACV_DA</span></span>
+<span><span class="co">#&gt; TRNSCRPT_WATSC_DA</span></span>
+<span><span class="co">#&gt; UBIQ_HEART_DA</span></span>
+<span><span class="co">#&gt; UBIQ_LIVER_DA</span></span>
 <span></span>
 <span><span class="co"># Return METHYL and ATAC differential analysis results for gastrocnemius </span></span>
 <span><span class="co"># res = combine_da_results(tissues="SKM-GN", </span></span>
@@ -1542,6 +1623,20 @@ tissues and assays. To perform a PCA, it requires previous filtering and
 assay selection. Let’s massage the data to get a PCA for every assay
 available for <code>LIVER</code>. Some of the metabolomics assays
 require imputation due to a larger number of missing values.</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">METAB_NORM_ONE_TISSUE</span> <span class="op">&lt;-</span> <span class="va">METAB_NORM_DATA_FLAT</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tissue</span> <span class="op">==</span> <span class="st">"HEART"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">all_assays_one_tissue</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">METAB_NORM_ONE_TISSUE</span><span class="op">$</span><span class="va">dataset</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">current_assay</span> <span class="kw">in</span> <span class="va">all_assays_one_tissue</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">METAB_NORM_ONE_ASSAY</span> <span class="op">&lt;-</span> <span class="va">METAB_NORM_ONE_TISSUE</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">dataset</span> <span class="op">==</span> <span class="va">current_assay</span><span class="op">)</span></span>
+<span>  <span class="va">METAB_NORM_ONE_ASSAY</span> <span class="op">&lt;-</span> <span class="va">METAB_NORM_ONE_ASSAY</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">dataset</span>, <span class="op">-</span><span class="va">metab_type</span><span class="op">)</span></span>
+<span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">do_pca_plot</span><span class="op">(</span>norm_data_object <span class="op">=</span> <span class="va">METAB_NORM_ONE_ASSAY</span>, </span>
+<span>                   object_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">toupper</a></span><span class="op">(</span><span class="va">current_assay</span><span class="op">)</span>,<span class="st">"_NORM"</span><span class="op">)</span>,</span>
+<span>                   impute <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-1.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-2.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-3.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-4.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-5.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-6.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-7.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-8.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-9.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-10.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-11.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-12.png" width="700" style="display: block; margin: auto;"><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-18-13.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -1566,9 +1661,521 @@ and time- specific p-values and effect sizes, referred to as the
 <em>timewise summary statistics</em>.</li>
 </ul>
 <div class="section level4">
+<h4 id="number-of-differential-analytes-line-plot">Number of Differential Analytes: Line plot<a class="anchor" aria-label="anchor" href="#number-of-differential-analytes-line-plot"></a>
+</h4>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Helper function to summarize up/down regulated features for metabolomics data</span></span>
+<span><span class="va">summarize_up_down_analytes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>,</span>
+<span>                                    <span class="va">feature_col</span> <span class="op">=</span> <span class="st">"feature"</span>,</span>
+<span>                                    <span class="va">logfc_col</span>   <span class="op">=</span> <span class="st">"logFC"</span>,</span>
+<span>                                    <span class="va">pval_col</span>    <span class="op">=</span> <span class="st">"adj_p_value"</span>,</span>
+<span>                                    <span class="va">p_threshold</span> <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">.data</span><span class="op">[[</span><span class="va">logfc_col</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>      <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">.data</span><span class="op">[[</span><span class="va">pval_col</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>      direction <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
+<span>        <span class="va">.data</span><span class="op">[[</span><span class="va">pval_col</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;</span> <span class="va">p_threshold</span> <span class="op">&amp;</span> <span class="va">.data</span><span class="op">[[</span><span class="va">logfc_col</span><span class="op">]</span><span class="op">]</span> <span class="op">&gt;</span>  <span class="fl">0</span> <span class="op">~</span> <span class="st">"Up"</span>,</span>
+<span>        <span class="va">.data</span><span class="op">[[</span><span class="va">pval_col</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;</span> <span class="va">p_threshold</span> <span class="op">&amp;</span> <span class="va">.data</span><span class="op">[[</span><span class="va">logfc_col</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;</span>  <span class="fl">0</span> <span class="op">~</span> <span class="st">"Down"</span>,</span>
+<span>        <span class="cn">TRUE</span>                                                     <span class="op">~</span> <span class="cn">NA_character_</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">direction</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">assay</span>, <span class="va">tissue</span>, <span class="va">comparison_group</span>, <span class="va">sex</span>, <span class="va">direction</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop_last"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span></span>
+<span>      names_from  <span class="op">=</span> <span class="va">direction</span>,</span>
+<span>      values_from <span class="op">=</span> <span class="va">count</span>,</span>
+<span>      values_fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span></span>
+<span>      up_count   <span class="op">=</span> <span class="va">Up</span>,</span>
+<span>      down_count <span class="op">=</span> <span class="va">Down</span></span>
+<span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Main function to plot differential feature trajectories</span></span>
+<span><span class="va">plot_da_trajectories</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tissue_select</span>,</span>
+<span>                                 <span class="va">assay_select</span>,</span>
+<span>                                 <span class="va">res_data</span>,</span>
+<span>                                 <span class="va">p_threshold</span> <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># First, summarize the data</span></span>
+<span>  <span class="va">de_counts</span> <span class="op">&lt;-</span> <span class="fu">summarize_up_down_analytes</span><span class="op">(</span></span>
+<span>    df <span class="op">=</span> <span class="va">res_data</span>,</span>
+<span>    feature_col <span class="op">=</span> <span class="st">"feature"</span>,</span>
+<span>    logfc_col <span class="op">=</span> <span class="st">"logFC"</span>,</span>
+<span>    pval_col <span class="op">=</span> <span class="st">"adj_p_value"</span>,</span>
+<span>    p_threshold <span class="op">=</span> <span class="va">p_threshold</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">full_time_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1w"</span>, <span class="st">"2w"</span>, <span class="st">"4w"</span>, <span class="st">"8w"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">de_counts</span> <span class="op">&lt;-</span> <span class="va">de_counts</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>timepoint <span class="op">=</span> <span class="va">comparison_group</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Filter &amp; convert down_count to negative</span></span>
+<span>  <span class="va">df_raw</span> <span class="op">&lt;-</span> <span class="va">de_counts</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tissue</span> <span class="op">==</span> <span class="va">tissue_select</span>,</span>
+<span>                  <span class="va">assay</span>  <span class="op">==</span> <span class="va">assay_select</span>,<span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>down_count <span class="op">=</span> <span class="op">-</span><span class="va">down_count</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df_raw</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span></span>
+<span>      <span class="st">"No data found for tissue: '"</span>,</span>
+<span>      <span class="va">tissue_select</span>,</span>
+<span>      <span class="st">"' and assay: '"</span>,</span>
+<span>      <span class="va">assay_select</span>,</span>
+<span>      <span class="st">"'. Check that these values exist in your data."</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="co"># Pivot longer and set factors</span></span>
+<span>  <span class="va">df_long</span> <span class="op">&lt;-</span> <span class="va">df_raw</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span></span>
+<span>      cols      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">up_count</span>, <span class="va">down_count</span><span class="op">)</span>,</span>
+<span>      names_to  <span class="op">=</span> <span class="st">"direction"</span>,</span>
+<span>      values_to <span class="op">=</span> <span class="st">"count"</span></span>
+<span>    <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>      direction <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span><span class="va">direction</span> <span class="op">==</span> <span class="st">"up_count"</span>, <span class="st">"Up"</span>, <span class="st">"Down"</span><span class="op">)</span>,</span>
+<span>      sex       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"female"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      timepoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">timepoint</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># Identify time points present in data</span></span>
+<span>  <span class="va">used_time_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">intersect</a></span><span class="op">(</span><span class="va">full_time_levels</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">df_long</span><span class="op">$</span><span class="va">timepoint</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co"># If no intersection, use the actual timepoints from data</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">used_time_levels</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">used_time_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">df_long</span><span class="op">$</span><span class="va">timepoint</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">full_time_levels</span> <span class="op">&lt;-</span> <span class="va">used_time_levels</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="co"># Complete missing with zeros and aggregate</span></span>
+<span>  <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df_long</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>timepoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">timepoint</span>, levels <span class="op">=</span> <span class="va">full_time_levels</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html" class="external-link">complete</a></span><span class="op">(</span><span class="va">timepoint</span>, <span class="va">sex</span>, <span class="va">direction</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">timepoint</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">used_time_levels</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">timepoint</span>, <span class="va">sex</span>, <span class="va">direction</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">count</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"No data remaining after processing for "</span>,</span>
+<span>         <span class="va">tissue_select</span>,</span>
+<span>         <span class="st">" / "</span>,</span>
+<span>         <span class="va">assay_select</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="co"># Compute symmetric y-axis limit</span></span>
+<span>  <span class="va">y_limit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">ceiling</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">count</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">/</span> <span class="fl">100</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">y_limit</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>    <span class="va">y_limit</span> <span class="op">&lt;-</span> <span class="fl">10</span>  <span class="co"># minimum scale</span></span>
+<span>  </span>
+<span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>,</span>
+<span>              <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
+<span>                x        <span class="op">=</span> <span class="va">timepoint</span>,</span>
+<span>                y        <span class="op">=</span> <span class="va">count</span>,</span>
+<span>                group    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">direction</span><span class="op">)</span>,</span>
+<span>                color    <span class="op">=</span> <span class="va">sex</span>,</span>
+<span>                linetype <span class="op">=</span> <span class="va">direction</span></span>
+<span>              <span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>               color <span class="op">=</span> <span class="st">"grey50"</span>,</span>
+<span>               linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>               color <span class="op">=</span> <span class="st">"grey50"</span>,</span>
+<span>               linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
+<span>      size <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>      shape <span class="op">=</span> <span class="fl">21</span>,</span>
+<span>      fill <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span>      stroke <span class="op">=</span> <span class="fl">0.8</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"female"</span> <span class="op">=</span> <span class="st">"hotpink3"</span>, <span class="st">"male"</span>   <span class="op">=</span> <span class="st">"blue3"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_linetype_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>Up <span class="op">=</span> <span class="st">"solid"</span>, Down <span class="op">=</span> <span class="st">"dotted"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="va">y_limit</span>, <span class="va">y_limit</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span>
+<span>      title    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">assay_select</span>, <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/toTitleCase.html" class="external-link">toTitleCase</a></span><span class="op">(</span><span class="va">tissue_select</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span>,</span>
+<span>      x        <span class="op">=</span> <span class="st">"Time Point"</span>,</span>
+<span>      y        <span class="op">=</span> <span class="st">"Differential Analyte Count"</span>,</span>
+<span>      color    <span class="op">=</span> <span class="st">"Sex"</span>,</span>
+<span>      linetype <span class="op">=</span> <span class="st">"Regulation"</span></span>
+<span>    <span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>      plot.title         <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span></span>
+<span>        size <span class="op">=</span> <span class="fl">14</span>,</span>
+<span>        face <span class="op">=</span> <span class="st">"bold"</span>,</span>
+<span>        hjust <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      axis.text.x        <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span></span>
+<span>        angle <span class="op">=</span> <span class="op">-</span><span class="fl">45</span>,</span>
+<span>        hjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>        color <span class="op">=</span> <span class="st">"black"</span></span>
+<span>      <span class="op">)</span>,</span>
+<span>      legend.position    <span class="op">=</span> <span class="st">"bottom"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Print the trajectory plot only for RNA-seq, HEART</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plot_da_trajectories</span><span class="op">(</span></span>
+<span>  tissue_select <span class="op">=</span> <span class="st">"HEART"</span>,</span>
+<span>  assay_select <span class="op">=</span> <span class="st">"TRNSCRPT"</span>,</span>
+<span>  res_data <span class="op">=</span> <span class="va">res</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-20-1.png" width="700" style="display: block; margin: auto;"></p>
+<div class="section level5">
+<h5 id="rna-seq-all-tissues">RNA-seq, all tissues<a class="anchor" aria-label="anchor" href="#rna-seq-all-tissues"></a>
+</h5>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">assay</span> <span class="op">&lt;-</span> <span class="st">"TRNSCRPT"</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">tissue</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">tissue</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Check if this tissue-assay combination exists</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">res</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tissue</span> <span class="op">==</span> <span class="op">!</span><span class="op">!</span><span class="va">tissue</span>, <span class="va">assay</span> <span class="op">==</span> <span class="op">!</span><span class="op">!</span><span class="va">assay</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Skipping"</span>, <span class="va">tissue</span>, <span class="st">"-"</span>, <span class="va">assay</span>, <span class="st">": no data found\n"</span><span class="op">)</span></span>
+<span>    <span class="kw">next</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Processing:"</span>, <span class="va">tissue</span>, <span class="st">"-"</span>, <span class="va">assay</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">plot_da_trajectories</span><span class="op">(</span></span>
+<span>    tissue_select <span class="op">=</span> <span class="va">tissue</span>,</span>
+<span>    assay_select <span class="op">=</span> <span class="va">assay</span>,</span>
+<span>    res_data <span class="op">=</span> <span class="va">res</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Processing: HEART - TRNSCRPT</span></span></code></pre></div>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-1.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: LIVER - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-2.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: ADRNL - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-3.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: BAT - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-4.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: COLON - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-5.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: CORTEX - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-6.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: HIPPOC - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-7.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: KIDNEY - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-8.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: LUNG - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-9.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: OVARY - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-10.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Skipping PLASMA - TRNSCRPT : no data found</span></span>
+<span><span class="co">#&gt; Processing: SKM-GN - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-11.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: SKM-VL - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-12.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: SMLINT - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-13.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: SPLEEN - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-14.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: TESTES - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-15.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: WAT-SC - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-16.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: HYPOTH - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-17.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: VENACV - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-18.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Processing: BLOOD - TRNSCRPT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-21-19.png" width="700" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level5">
+<h5 id="proteomic-assays-all-tissues">Proteomic assays, all tissues<a class="anchor" aria-label="anchor" href="#proteomic-assays-all-tissues"></a>
+</h5>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">assay_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PROT"</span>, <span class="st">"PHOSPHO"</span>, <span class="st">"ACETYL"</span>, <span class="st">"UBIQ"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">assay</span> <span class="kw">in</span> <span class="va">assay_list</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">tissue</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">tissue</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># Debug: Check the combination explicitly</span></span>
+<span>    <span class="va">subset_data</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">[</span><span class="va">res</span><span class="op">$</span><span class="va">tissue</span> <span class="op">==</span> <span class="va">tissue</span> <span class="op">&amp;</span> <span class="va">res</span><span class="op">$</span><span class="va">assay</span> <span class="op">==</span> <span class="va">assay</span>, <span class="op">]</span></span>
+<span>    </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Checking:"</span>, <span class="va">tissue</span>, <span class="st">"-"</span>, <span class="va">assay</span>, <span class="st">"- Found"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">subset_data</span><span class="op">)</span>, <span class="st">"rows\n"</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">subset_data</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Skipping"</span>, <span class="va">tissue</span>, <span class="st">"-"</span>, <span class="va">assay</span>, <span class="st">": no data found\n"</span><span class="op">)</span></span>
+<span>      <span class="kw">next</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Processing:"</span>, <span class="va">tissue</span>, <span class="st">"-"</span>, <span class="va">assay</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">plot_da_trajectories</span><span class="op">(</span></span>
+<span>        tissue_select <span class="op">=</span> <span class="va">tissue</span>,</span>
+<span>        assay_select <span class="op">=</span> <span class="va">assay</span>,</span>
+<span>        res_data <span class="op">=</span> <span class="va">res</span></span>
+<span>      <span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span>    <span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Error with"</span>, <span class="va">tissue</span>, <span class="st">"-"</span>, <span class="va">assay</span>, <span class="st">":"</span>, <span class="va">e</span><span class="op">$</span><span class="va">message</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; Checking: HEART - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HEART - PROT</span></span></code></pre></div>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-1.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: LIVER - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LIVER - PROT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-2.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: ADRNL - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: ADRNL - PROT </span></span>
+<span><span class="co">#&gt; Error with ADRNL - PROT : No data found for tissue: 'ADRNL' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BAT - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BAT - PROT </span></span>
+<span><span class="co">#&gt; Error with BAT - PROT : No data found for tissue: 'BAT' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: COLON - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: COLON - PROT </span></span>
+<span><span class="co">#&gt; Error with COLON - PROT : No data found for tissue: 'COLON' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: CORTEX - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: CORTEX - PROT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-3.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: HIPPOC - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HIPPOC - PROT </span></span>
+<span><span class="co">#&gt; Error with HIPPOC - PROT : No data found for tissue: 'HIPPOC' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: KIDNEY - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: KIDNEY - PROT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-4.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: LUNG - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LUNG - PROT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-5.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: OVARY - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: OVARY - PROT </span></span>
+<span><span class="co">#&gt; Error with OVARY - PROT : No data found for tissue: 'OVARY' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: PLASMA - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: PLASMA - PROT </span></span>
+<span><span class="co">#&gt; Error with PLASMA - PROT : No data found for tissue: 'PLASMA' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SKM-GN - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-GN - PROT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-6.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: SKM-VL - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-VL - PROT </span></span>
+<span><span class="co">#&gt; Error with SKM-VL - PROT : No data found for tissue: 'SKM-VL' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SMLINT - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SMLINT - PROT </span></span>
+<span><span class="co">#&gt; Error with SMLINT - PROT : No data found for tissue: 'SMLINT' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SPLEEN - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SPLEEN - PROT </span></span>
+<span><span class="co">#&gt; Error with SPLEEN - PROT : No data found for tissue: 'SPLEEN' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: TESTES - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: TESTES - PROT </span></span>
+<span><span class="co">#&gt; Error with TESTES - PROT : No data found for tissue: 'TESTES' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: WAT-SC - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: WAT-SC - PROT</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-7.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: HYPOTH - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HYPOTH - PROT </span></span>
+<span><span class="co">#&gt; Error with HYPOTH - PROT : No data found for tissue: 'HYPOTH' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: VENACV - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: VENACV - PROT </span></span>
+<span><span class="co">#&gt; Error with VENACV - PROT : No data found for tissue: 'VENACV' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BLOOD - PROT - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BLOOD - PROT </span></span>
+<span><span class="co">#&gt; Error with BLOOD - PROT : No data found for tissue: 'BLOOD' and assay: 'PROT'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HEART - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HEART - PHOSPHO</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-8.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: LIVER - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LIVER - PHOSPHO</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-9.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: ADRNL - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: ADRNL - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with ADRNL - PHOSPHO : No data found for tissue: 'ADRNL' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BAT - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BAT - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with BAT - PHOSPHO : No data found for tissue: 'BAT' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: COLON - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: COLON - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with COLON - PHOSPHO : No data found for tissue: 'COLON' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: CORTEX - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: CORTEX - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with CORTEX - PHOSPHO : No data found for tissue: 'CORTEX' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HIPPOC - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HIPPOC - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with HIPPOC - PHOSPHO : No data found for tissue: 'HIPPOC' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: KIDNEY - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: KIDNEY - PHOSPHO</span></span>
+<span><span class="co">#&gt; `geom_line()`: Each group consists of only one observation.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-10.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: LUNG - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LUNG - PHOSPHO</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-11.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: OVARY - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: OVARY - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with OVARY - PHOSPHO : No data found for tissue: 'OVARY' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: PLASMA - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: PLASMA - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with PLASMA - PHOSPHO : No data found for tissue: 'PLASMA' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SKM-GN - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-GN - PHOSPHO</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-12.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: SKM-VL - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-VL - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with SKM-VL - PHOSPHO : No data found for tissue: 'SKM-VL' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SMLINT - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SMLINT - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with SMLINT - PHOSPHO : No data found for tissue: 'SMLINT' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SPLEEN - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SPLEEN - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with SPLEEN - PHOSPHO : No data found for tissue: 'SPLEEN' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: TESTES - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: TESTES - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with TESTES - PHOSPHO : No data found for tissue: 'TESTES' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: WAT-SC - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: WAT-SC - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with WAT-SC - PHOSPHO : No data found for tissue: 'WAT-SC' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HYPOTH - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HYPOTH - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with HYPOTH - PHOSPHO : No data found for tissue: 'HYPOTH' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: VENACV - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: VENACV - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with VENACV - PHOSPHO : No data found for tissue: 'VENACV' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BLOOD - PHOSPHO - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BLOOD - PHOSPHO </span></span>
+<span><span class="co">#&gt; Error with BLOOD - PHOSPHO : No data found for tissue: 'BLOOD' and assay: 'PHOSPHO'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HEART - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HEART - ACETYL</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-13.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: LIVER - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LIVER - ACETYL</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-14.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: ADRNL - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: ADRNL - ACETYL </span></span>
+<span><span class="co">#&gt; Error with ADRNL - ACETYL : No data found for tissue: 'ADRNL' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BAT - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BAT - ACETYL </span></span>
+<span><span class="co">#&gt; Error with BAT - ACETYL : No data found for tissue: 'BAT' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: COLON - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: COLON - ACETYL </span></span>
+<span><span class="co">#&gt; Error with COLON - ACETYL : No data found for tissue: 'COLON' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: CORTEX - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: CORTEX - ACETYL </span></span>
+<span><span class="co">#&gt; Error with CORTEX - ACETYL : No data found for tissue: 'CORTEX' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HIPPOC - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HIPPOC - ACETYL </span></span>
+<span><span class="co">#&gt; Error with HIPPOC - ACETYL : No data found for tissue: 'HIPPOC' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: KIDNEY - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: KIDNEY - ACETYL </span></span>
+<span><span class="co">#&gt; Error with KIDNEY - ACETYL : No data found for tissue: 'KIDNEY' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: LUNG - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LUNG - ACETYL </span></span>
+<span><span class="co">#&gt; Error with LUNG - ACETYL : No data found for tissue: 'LUNG' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: OVARY - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: OVARY - ACETYL </span></span>
+<span><span class="co">#&gt; Error with OVARY - ACETYL : No data found for tissue: 'OVARY' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: PLASMA - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: PLASMA - ACETYL </span></span>
+<span><span class="co">#&gt; Error with PLASMA - ACETYL : No data found for tissue: 'PLASMA' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SKM-GN - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-GN - ACETYL </span></span>
+<span><span class="co">#&gt; Error with SKM-GN - ACETYL : No data found for tissue: 'SKM-GN' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SKM-VL - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-VL - ACETYL </span></span>
+<span><span class="co">#&gt; Error with SKM-VL - ACETYL : No data found for tissue: 'SKM-VL' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SMLINT - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SMLINT - ACETYL </span></span>
+<span><span class="co">#&gt; Error with SMLINT - ACETYL : No data found for tissue: 'SMLINT' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SPLEEN - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SPLEEN - ACETYL </span></span>
+<span><span class="co">#&gt; Error with SPLEEN - ACETYL : No data found for tissue: 'SPLEEN' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: TESTES - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: TESTES - ACETYL </span></span>
+<span><span class="co">#&gt; Error with TESTES - ACETYL : No data found for tissue: 'TESTES' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: WAT-SC - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: WAT-SC - ACETYL </span></span>
+<span><span class="co">#&gt; Error with WAT-SC - ACETYL : No data found for tissue: 'WAT-SC' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HYPOTH - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HYPOTH - ACETYL </span></span>
+<span><span class="co">#&gt; Error with HYPOTH - ACETYL : No data found for tissue: 'HYPOTH' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: VENACV - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: VENACV - ACETYL </span></span>
+<span><span class="co">#&gt; Error with VENACV - ACETYL : No data found for tissue: 'VENACV' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BLOOD - ACETYL - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BLOOD - ACETYL </span></span>
+<span><span class="co">#&gt; Error with BLOOD - ACETYL : No data found for tissue: 'BLOOD' and assay: 'ACETYL'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HEART - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HEART - UBIQ </span></span>
+<span><span class="co">#&gt; Error with HEART - UBIQ : No data found for tissue: 'HEART' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: LIVER - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LIVER - UBIQ</span></span>
+<span><span class="co">#&gt; `geom_line()`: Each group consists of only one observation.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span></span></code></pre>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-22-15.png" width="700" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">#&gt; Checking: ADRNL - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: ADRNL - UBIQ </span></span>
+<span><span class="co">#&gt; Error with ADRNL - UBIQ : No data found for tissue: 'ADRNL' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BAT - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BAT - UBIQ </span></span>
+<span><span class="co">#&gt; Error with BAT - UBIQ : No data found for tissue: 'BAT' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: COLON - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: COLON - UBIQ </span></span>
+<span><span class="co">#&gt; Error with COLON - UBIQ : No data found for tissue: 'COLON' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: CORTEX - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: CORTEX - UBIQ </span></span>
+<span><span class="co">#&gt; Error with CORTEX - UBIQ : No data found for tissue: 'CORTEX' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HIPPOC - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HIPPOC - UBIQ </span></span>
+<span><span class="co">#&gt; Error with HIPPOC - UBIQ : No data found for tissue: 'HIPPOC' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: KIDNEY - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: KIDNEY - UBIQ </span></span>
+<span><span class="co">#&gt; Error with KIDNEY - UBIQ : No data found for tissue: 'KIDNEY' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: LUNG - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: LUNG - UBIQ </span></span>
+<span><span class="co">#&gt; Error with LUNG - UBIQ : No data found for tissue: 'LUNG' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: OVARY - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: OVARY - UBIQ </span></span>
+<span><span class="co">#&gt; Error with OVARY - UBIQ : No data found for tissue: 'OVARY' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: PLASMA - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: PLASMA - UBIQ </span></span>
+<span><span class="co">#&gt; Error with PLASMA - UBIQ : No data found for tissue: 'PLASMA' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SKM-GN - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-GN - UBIQ </span></span>
+<span><span class="co">#&gt; Error with SKM-GN - UBIQ : No data found for tissue: 'SKM-GN' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SKM-VL - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SKM-VL - UBIQ </span></span>
+<span><span class="co">#&gt; Error with SKM-VL - UBIQ : No data found for tissue: 'SKM-VL' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SMLINT - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SMLINT - UBIQ </span></span>
+<span><span class="co">#&gt; Error with SMLINT - UBIQ : No data found for tissue: 'SMLINT' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: SPLEEN - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: SPLEEN - UBIQ </span></span>
+<span><span class="co">#&gt; Error with SPLEEN - UBIQ : No data found for tissue: 'SPLEEN' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: TESTES - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: TESTES - UBIQ </span></span>
+<span><span class="co">#&gt; Error with TESTES - UBIQ : No data found for tissue: 'TESTES' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: WAT-SC - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: WAT-SC - UBIQ </span></span>
+<span><span class="co">#&gt; Error with WAT-SC - UBIQ : No data found for tissue: 'WAT-SC' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: HYPOTH - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: HYPOTH - UBIQ </span></span>
+<span><span class="co">#&gt; Error with HYPOTH - UBIQ : No data found for tissue: 'HYPOTH' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: VENACV - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: VENACV - UBIQ </span></span>
+<span><span class="co">#&gt; Error with VENACV - UBIQ : No data found for tissue: 'VENACV' and assay: 'UBIQ'. Check that these values exist in your data. </span></span>
+<span><span class="co">#&gt; Checking: BLOOD - UBIQ - Found 5279136 rows</span></span>
+<span><span class="co">#&gt; Processing: BLOOD - UBIQ </span></span>
+<span><span class="co">#&gt; Error with BLOOD - UBIQ : No data found for tissue: 'BLOOD' and assay: 'UBIQ'. Check that these values exist in your data.</span></span></code></pre>
+</div>
+</div>
+<div class="section level4">
 <h4 id="volcano-plots">Volcano plots<a class="anchor" aria-label="anchor" href="#volcano-plots"></a>
 </h4>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Function to generate a volcano plot for a given data object</span></span>
 <span><span class="va">create_volcano_plot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data_object</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Extract the name of the data object</span></span>
@@ -1602,7 +2209,7 @@ and time- specific p-values and effect sizes, referred to as the
 <span></span>
 <span><span class="co"># Example usage</span></span>
 <span><span class="fu">create_volcano_plot</span><span class="op">(</span><span class="va">TRNSCRPT_BAT_DA</span><span class="op">)</span></span></code></pre></div>
-<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-19-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-23-1.png" width="768" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="replicating-differential-analysis-results">Replicating differential analysis results<a class="anchor" aria-label="anchor" href="#replicating-differential-analysis-results"></a>
@@ -1673,7 +2280,7 @@ details, e.g. <code><a href="https://motrpac.github.io/MotrpacRatTraining6mo/ref
 </ul>
 <p>Here, we replicate the protein acetylation timewise differential
 analysis results provided in <a href="https://motrpac.github.io/MotrpacRatTraining6moData/" class="external-link">MotrpacRatTraining6moData</a>.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">timewiseList</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">tissue</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HEART"</span>,<span class="st">"LIVER"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">timewiseList</span><span class="op">[[</span><span class="va">tissue</span><span class="op">]</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://motrpac.github.io/MotrpacRatTraining6mo/reference/proteomics_timewise_da.html" class="external-link">proteomics_timewise_da</a></span><span class="op">(</span><span class="st">"ACETYL"</span>, <span class="va">tissue</span><span class="op">)</span></span>
@@ -1707,25 +2314,25 @@ analysis results provided in <a href="https://motrpac.github.io/MotrpacRatTraini
 <p>We can plot the differential analysis results for a single feature
 using <code><a href="https://motrpac.github.io/MotrpacRatTraining6mo/reference/plot_feature_logfc.html" class="external-link">plot_feature_logfc()</a></code>. All of the following examples
 are different ways to plot results for the same feature.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://motrpac.github.io/MotrpacRatTraining6mo/reference/plot_feature_logfc.html" class="external-link">plot_feature_logfc</a></span><span class="op">(</span>feature <span class="op">=</span> <span class="st">"PROT;SKM-GN;NP_786937.1"</span>,</span>
 <span>                   add_gene_symbol <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-20-1.png" width="700" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-24-1.png" width="700" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://motrpac.github.io/MotrpacRatTraining6mo/reference/plot_feature_logfc.html" class="external-link">plot_feature_logfc</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"PROT"</span>,</span>
 <span>                   tissue <span class="op">=</span> <span class="st">"SKM-GN"</span>,</span>
 <span>                   feature_ID <span class="op">=</span> <span class="st">"NP_786937.1"</span>,</span>
 <span>                   scale_x_by_time <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-20-2.png" width="700" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-24-2.png" width="700" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://motrpac.github.io/MotrpacRatTraining6mo/reference/plot_feature_logfc.html" class="external-link">plot_feature_logfc</a></span><span class="op">(</span>assay <span class="op">=</span> <span class="st">"PROT"</span>,</span>
 <span>                   tissue <span class="op">=</span> <span class="st">"SKM-GN"</span>,</span>
 <span>                   feature_ID <span class="op">=</span> <span class="st">"NP_786937.1"</span>,</span>
 <span>                   facet_by_sex <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                   add_adj_p <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-20-3.png" width="700" style="display: block; margin: auto;"></p>
+<p><img src="rat-endurance-6m_files/figure-html/unnamed-chunk-24-3.png" width="700" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -1755,11 +2362,11 @@ and National Institute on Aging (NIA).</p>
 <div class="section level3">
 <h3 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h3>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.3.3 (2024-02-29)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin20 (64-bit)</span></span>
-<span><span class="co">#&gt; Running under: macOS 15.5</span></span>
+<span><span class="co">#&gt; Running under: macOS 15.7.1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib </span></span>
@@ -1776,11 +2383,11 @@ and National Institute on Aging (NIA).</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
 <span><span class="co">#&gt;  [1] UpSetR_1.4.0                    viridis_0.6.5                  </span></span>
-<span><span class="co">#&gt;  [3] viridisLite_0.4.2               pheatmap_1.0.12                </span></span>
+<span><span class="co">#&gt;  [3] viridisLite_0.4.2               pheatmap_1.0.13                </span></span>
 <span><span class="co">#&gt;  [5] lubridate_1.9.4                 forcats_1.0.0                  </span></span>
-<span><span class="co">#&gt;  [7] stringr_1.5.1                   purrr_1.0.4                    </span></span>
+<span><span class="co">#&gt;  [7] stringr_1.5.1                   purrr_1.1.0                    </span></span>
 <span><span class="co">#&gt;  [9] readr_2.1.5                     tidyr_1.3.1                    </span></span>
-<span><span class="co">#&gt; [11] tibble_3.2.1                    tidyverse_2.0.0                </span></span>
+<span><span class="co">#&gt; [11] tibble_3.3.0                    tidyverse_2.0.0                </span></span>
 <span><span class="co">#&gt; [13] impute_1.76.0                   dplyr_1.1.4                    </span></span>
 <span><span class="co">#&gt; [15] ggplot2_3.5.2                   MotrpacRatTraining6mo_1.6.6    </span></span>
 <span><span class="co">#&gt; [17] MotrpacRatTraining6moData_2.0.0</span></span>
@@ -1791,32 +2398,32 @@ and National Institute on Aging (NIA).</p>
 <span><span class="co">#&gt;  [7] multcomp_1.4-28     qqconf_1.3.2        compiler_4.3.3     </span></span>
 <span><span class="co">#&gt; [10] systemfonts_1.2.3   vctrs_0.6.5         crayon_1.5.3       </span></span>
 <span><span class="co">#&gt; [13] pkgconfig_2.0.3     fastmap_1.2.0       labeling_0.4.3     </span></span>
-<span><span class="co">#&gt; [16] ggraph_2.2.1        r2r_0.1.2           rmarkdown_2.29     </span></span>
-<span><span class="co">#&gt; [19] tzdb_0.5.0          ragg_1.4.0          xfun_0.52          </span></span>
-<span><span class="co">#&gt; [22] cachem_1.1.0        jsonlite_2.0.0      tweenr_2.0.3       </span></span>
-<span><span class="co">#&gt; [25] R6_2.6.1            bslib_0.9.0         stringi_1.8.7      </span></span>
-<span><span class="co">#&gt; [28] RColorBrewer_1.1-3  limma_3.58.1        mutoss_0.1-13      </span></span>
-<span><span class="co">#&gt; [31] jquerylib_0.1.4     numDeriv_2016.8-1.1 Rcpp_1.0.14        </span></span>
-<span><span class="co">#&gt; [34] knitr_1.50          zoo_1.8-14          Matrix_1.6-5       </span></span>
-<span><span class="co">#&gt; [37] splines_4.3.3       igraph_2.1.4        timechange_0.3.0   </span></span>
-<span><span class="co">#&gt; [40] tidyselect_1.2.1    rstudioapi_0.17.1   yaml_2.3.10        </span></span>
-<span><span class="co">#&gt; [43] codetools_0.2-20    plyr_1.8.9          lattice_0.22-7     </span></span>
-<span><span class="co">#&gt; [46] Biobase_2.66.0      withr_3.0.2         evaluate_1.0.3     </span></span>
-<span><span class="co">#&gt; [49] desc_1.4.3          survival_3.8-3      polyclip_1.10-7    </span></span>
-<span><span class="co">#&gt; [52] pillar_1.10.2       stats4_4.3.3        sn_2.1.1           </span></span>
-<span><span class="co">#&gt; [55] generics_0.1.3      mathjaxr_1.8-0      hms_1.1.3          </span></span>
-<span><span class="co">#&gt; [58] scales_1.4.0        TFisher_0.2.0       glue_1.8.0         </span></span>
-<span><span class="co">#&gt; [61] tools_4.3.3         metap_1.12          data.table_1.17.0  </span></span>
-<span><span class="co">#&gt; [64] locfit_1.5-9.12     fs_1.6.6            visNetwork_2.1.2   </span></span>
-<span><span class="co">#&gt; [67] mvtnorm_1.3-3       graphlayouts_1.2.2  tidygraph_1.3.1    </span></span>
-<span><span class="co">#&gt; [70] grid_4.3.3          plotrix_3.8-4       rbibutils_2.3      </span></span>
-<span><span class="co">#&gt; [73] edgeR_4.0.16        ggforce_0.4.2       cli_3.6.5          </span></span>
-<span><span class="co">#&gt; [76] textshaping_1.0.1   gtable_0.3.6        sass_0.4.10        </span></span>
-<span><span class="co">#&gt; [79] digest_0.6.37       BiocGenerics_0.48.1 ggrepel_0.9.6      </span></span>
-<span><span class="co">#&gt; [82] TH.data_1.1-3       htmlwidgets_1.6.4   farver_2.1.2       </span></span>
-<span><span class="co">#&gt; [85] memoise_2.0.1       htmltools_0.5.8.1   pkgdown_2.1.2      </span></span>
-<span><span class="co">#&gt; [88] multtest_2.58.0     lifecycle_1.0.4     statmod_1.5.0      </span></span>
-<span><span class="co">#&gt; [91] MASS_7.3-60.0.1</span></span></code></pre></div>
+<span><span class="co">#&gt; [16] rmdformats_1.0.4    ggraph_2.2.2        r2r_0.1.2          </span></span>
+<span><span class="co">#&gt; [19] rmarkdown_2.29      tzdb_0.5.0          ragg_1.4.0         </span></span>
+<span><span class="co">#&gt; [22] xfun_0.53           cachem_1.1.0        jsonlite_2.0.0     </span></span>
+<span><span class="co">#&gt; [25] tweenr_2.0.3        R6_2.6.1            bslib_0.9.0        </span></span>
+<span><span class="co">#&gt; [28] stringi_1.8.7       RColorBrewer_1.1-3  limma_3.58.1       </span></span>
+<span><span class="co">#&gt; [31] mutoss_0.1-13       jquerylib_0.1.4     numDeriv_2016.8-1.1</span></span>
+<span><span class="co">#&gt; [34] Rcpp_1.1.0          bookdown_0.44       knitr_1.50         </span></span>
+<span><span class="co">#&gt; [37] zoo_1.8-14          timechange_0.3.0    Matrix_1.6-5       </span></span>
+<span><span class="co">#&gt; [40] splines_4.3.3       igraph_2.1.4        tidyselect_1.2.1   </span></span>
+<span><span class="co">#&gt; [43] rstudioapi_0.17.1   yaml_2.3.10         codetools_0.2-20   </span></span>
+<span><span class="co">#&gt; [46] plyr_1.8.9          lattice_0.22-7      Biobase_2.66.0     </span></span>
+<span><span class="co">#&gt; [49] withr_3.0.2         evaluate_1.0.5      desc_1.4.3         </span></span>
+<span><span class="co">#&gt; [52] survival_3.8-3      polyclip_1.10-7     pillar_1.11.0      </span></span>
+<span><span class="co">#&gt; [55] stats4_4.3.3        sn_2.1.1            generics_0.1.4     </span></span>
+<span><span class="co">#&gt; [58] mathjaxr_1.8-0      hms_1.1.3           scales_1.4.0       </span></span>
+<span><span class="co">#&gt; [61] TFisher_0.2.0       glue_1.8.0          tools_4.3.3        </span></span>
+<span><span class="co">#&gt; [64] metap_1.12          data.table_1.17.8   locfit_1.5-9.12    </span></span>
+<span><span class="co">#&gt; [67] fs_1.6.6            visNetwork_2.1.2    mvtnorm_1.3-3      </span></span>
+<span><span class="co">#&gt; [70] graphlayouts_1.2.2  tidygraph_1.3.1     grid_4.3.3         </span></span>
+<span><span class="co">#&gt; [73] plotrix_3.8-4       rbibutils_2.3       edgeR_4.0.16       </span></span>
+<span><span class="co">#&gt; [76] ggforce_0.5.0       cli_3.6.5           textshaping_1.0.1  </span></span>
+<span><span class="co">#&gt; [79] gtable_0.3.6        sass_0.4.10         digest_0.6.37      </span></span>
+<span><span class="co">#&gt; [82] BiocGenerics_0.48.1 ggrepel_0.9.6       TH.data_1.1-4      </span></span>
+<span><span class="co">#&gt; [85] htmlwidgets_1.6.4   farver_2.1.2        memoise_2.0.1      </span></span>
+<span><span class="co">#&gt; [88] htmltools_0.5.8.1   pkgdown_2.1.3       multtest_2.58.0    </span></span>
+<span><span class="co">#&gt; [91] lifecycle_1.0.4     statmod_1.5.0       MASS_7.3-60.0.1</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -1830,7 +2437,7 @@ and National Institute on Aging (NIA).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
