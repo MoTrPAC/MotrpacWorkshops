@@ -1,4 +1,4 @@
-site_url: https://motrpac.github.io/MotrpacWorkshops/
+url: https://motrpac.github.io/MotrpacWorkshops/
 
 template:
   # switch pkgdown to Bootstrap 5
