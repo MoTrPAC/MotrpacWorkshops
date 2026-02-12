@@ -85,6 +85,10 @@ devtools::install_github("MoTrPAC/MotrpacRatTraining6mo")
 Once we install this package, we can load these and other libraries used
 in this tutorial:
 
+<!-- Below note could be helpful to include here. Source: https://motrpac.github.io/MotrpacRatTraining6mo/articles/MotrpacRatTraining6mo.html#setup -->
+
+As of v1.5.0, attaching `MotrpacRatTraining6mo` also attaches `MotrpacRatTraining6moData`, so an additional `library(MotrpacRatTraining6moData)` command is not necessary. For older versions of `MotrpacRatTraining6mo`, attach `MotrpacRatTraining6moData` directly.
+
 ```{r setup}
 library(MotrpacRatTraining6moData)
 library(MotrpacRatTraining6mo)
@@ -114,12 +118,28 @@ sex per time point were analyzed. [Check this link](https://motrpac-data.org/pro
 experimental design, and [Figure 1 of the Nature paper](https://www.nature.com/articles/s41586-023-06877-w/figures/1). 
 
 
-The **PHENO** object represents phenotypic data from the MoTrPAC
-endurance exercise training study in six-month-old rats. 
+The **PHENO** object (from the `MotrpacRatTraining6moData` package) represents phenotypic data from the MoTrPAC endurance exercise training study in six-month-old rats. 
+
+<!-- Perhaps helpful to show some examples of how to access/view object: -->
+
+```{r, eval = F}
+# View documentation
+?PHENO
+
+# Preview PHENO dataframe
+head(PHENO)
+
+# Open dataframe viewer in RStudio
+View(PHENO)
+
+# Load in dataframe
+data(PHENO)
+```
+
 
 > **Important**: The endurance study was conducted at two Preclinical Animal Study Sites (PASS): the University of Iowa and Joslin Diabetes Center. *Phenotypic data include animals from both sites*; however, omics data were generated only from animals processed at the University of Iowa site to ensure standardization for molecular assays. Samples from animals at the Joslin site were not used for omics analyses but have been preserved and are stored in freezers. It is anticipated that these samples may become available for follow-up endurance exercise studies through future funding opportunities,
 
-The PHENO data object is a comprehensive dataset containing **5,955 rows and 510 variables**, with
+The PHENO data object is a comprehensive dataset containing **6,156 rows and 509 variables**, with
 each row corresponding to a unique sample identified by `viallabel` (which is the sample id). The
 dataset captures detailed information on the animals, their training
 regimens, specimen collection, and various physiological metrics. Here
@@ -190,7 +210,7 @@ is a summary of the major components:
     each sample vial. This ID is present across all related results and
     metadata files, serving as a key to link the quantitative results
     with the phenotypic data.
--   **`sex`**: Sex of the animal. Represented as `"female"` for Female
+-   **`sex`**: Sex of the animal. Represented as `"female"`
     and `"male"`. This variable is critical for any analysis that aims
     to determine sex-based differences.
 -   **`group`**: A simplify version of `study_group_timepoint` that only
@@ -208,6 +228,10 @@ of physical activity at various biological levels.
 ### Visualizations of Phenotypes
 
 #### Animal counts
+
+<!-- Maybe split the below into 2 steps: First, let's load in the data. Then, let's select the ids of the rats... -->
+
+<!-- For data loading step, it would be helpful to highlight the relationship between MotrpacRatTraining6moData and MotrpacRatTraining6mo, i.e.: While data objects in MotrpacRatTraining6moData (e.g., PROT_CORTEX_NORM_DATA, PHOSPHO_CORTEX_NORM_DATA) can be accessed directly, MotrpacRatTraining6mo provides convenience functions like combine_normalized_data() to help retrieve data easier. (Or could also be helpful to include link to "Load the data" section) -->
 
 First, let's select the ids of the rats used in this study. For that, we will first extract
 the samples ids, and we'll map those samples ids to the rats ids.
@@ -659,7 +683,7 @@ package:
     Cloud Storage. See more details
     [here](https://motrpac.github.io/MotrpacRatTraining6moData/index.html#access-epigenomics-data-through-google-cloud-storage).
 -   Normalized sample-level data, e.g., `TRNSCRPT_SKMGN_NORM_DATA`
--   Differential analysis results, e.g., `HEART_PROT_DA`
+-   Differential analysis results, e.g., `PROT_HEART_DA`
 -   Sample outliers excluded from differential analysis, `OUTLIERS`
 -   Table of training-regulated features at 5% FDR,
     `TRAINING_REGULATED_FEATURES`
@@ -1029,6 +1053,8 @@ e.g., `data(TRAINING_REGULATED_FEATURES)`.
 
 # ANALYSIS
 
+<!-- Would be helpful to briefly state here that we can either directly perform analysis using data objects from `MotrpacRatTraining6moData` or use the analysis functions provided in `MotrpacRatTraining6mo`, just to give some context before diving into the examples below. -->
+
 ## Principal component analysis
 
 Function to perform a PCA on any of the available NORM datasets
@@ -1175,7 +1201,7 @@ for (object_name in norm_objects) {
 The `NORM` data object for metabolomics contains all tissues and assays.
 To perform a PCA, it requires previous filtering and assay selection.
 Let's massage the data to get a PCA for every assay available for
-`LIVER`. Some of the metabolomics assays require imputation due to a 
+`HEART`. Some of the metabolomics assays require imputation due to a 
 larger number of missing values.
 
 ```{r eval=TRUE, include=TRUE}
@@ -1201,7 +1227,7 @@ publication](https://www.nature.com/articles/s41586-023-06877-w#Sec14).
 
 Simply put: 
 
-- the *training* differential analysis considers all
+- The *training* differential analysis considers all
 training groups for each sex (sedentary controls and 4 training time
 points) to determine if the analyte significantly changes in either sex
 at any point during the training time course. The adjusted p-values from

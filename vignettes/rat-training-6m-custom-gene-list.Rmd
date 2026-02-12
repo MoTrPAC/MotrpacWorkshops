@@ -34,7 +34,7 @@ This interactive workflow enables you to explore how **your genes of interest** 
 - **Dataset Overview**: Visualization of all available multi-omics data (transcriptomics, proteomics, metabolomics, etc.)
 - **Gene Coverage**: Automatic mapping of your genes across different omics platforms and tissues
 - **Interactive Tables**: Searchable, filterable results showing log fold-changes and significance
-- **Trajectory Plots**: visualizations of how your genes change over the training time course (1w, 2w, 4w, 8w)
+- **Trajectory Plots**: Visualizations of how your genes change over the training time course (1w, 2w, 4w, 8w)
 - **Heatmaps**: Sex-specific comparison of gene responses across tissues and time points with significance markers
 - **Multi-Tissue Insights**: Identify tissue-specific and sex-specific exercise responses
 
@@ -508,7 +508,7 @@ Create heatmaps showing the pattern of regulation for each gene across tissues, 
   - **Blue** = downregulation (negative logFC)
   - **Red** = upregulation (positive logFC)
   - **White** = no change
-- **Asterisks (*)** mark statistically significant changes (FDR < 0.05)
+- **Asterisks (\*)** mark statistically significant changes (FDR < 0.05)
 - **Column arrangement**: Female time points (1w-8w) | Male time points (1w-8w)
 - **Rows are NOT clustered** to preserve tissue order for easier comparison between genes
 
@@ -648,7 +648,7 @@ Compare all genes simultaneously in a specific tissue, showing both female and m
   - **Blue** = downregulation
   - **Red** = upregulation
   - **Gray** = no data available for that combination
-- **Asterisks (*)** mark significant changes (FDR < 0.05)
+- **Asterisks (\*)** mark significant changes (FDR < 0.05)
 - **Column organization**: Female time points (1w-8w) | Male time points (1w-8w)
 
 **What to look for:**
